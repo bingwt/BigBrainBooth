@@ -1,10 +1,17 @@
 <script lang="ts">
 	import { SignIn } from "@auth/sveltekit/components"
 	import { page } from "$app/stores";
+	import Schedule from "$lib/components/Schedule.svelte";
+	
+	$: email = $page.data?.session?.user?.email;
+	$: login = $page.data.session?.user?.email?.split('@')[0]
  </script>
 
 {#if $page.data.session}
-<h1 class="text-4xl">Welcome, <span class="font-bold">{$page.data.session?.user?.email?.split('@')[0]}</span></h1>
+<div class="flex flex-col gap-4 mt-12 p-0 w-[90dvw]">
+<h1 class="text-4xl">Welcome, <span class="font-bold">{login}</span></h1>
+<Schedule />
+</div>
 {:else}
 <div class="flex flex-col gap-4">
 	<h1 class="text-4xl">Big Brain Booth</h1>
