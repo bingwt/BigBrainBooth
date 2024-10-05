@@ -65,3 +65,8 @@
 	font-weight: 800;
 	src: url('/fonts/Satoshi/Satoshi-ExtraBold.woff2')format('woff2');
 }
+
+.ec {
+	--ec-event-bg-color: #D6EFEE;
+	--ec-bg-event-color: #D6EFEE;
+}

@@ -9,9 +9,9 @@
 	{#if $page.data.session}
 	<NavBar />
 	{/if}
-	<div class="hero bg-primary min-h-screen font-satoshi">
-		<div class="hero-content text-center">
-			<div class="max-w-md">
+	<div class="hero bg-primary min-h-screen font-satoshi over">
+		<div class="hero-content overflow-scroll">
+			<div class="w-[90dvw] mt-12">
 				<slot />
 			</div>
 		</div>
