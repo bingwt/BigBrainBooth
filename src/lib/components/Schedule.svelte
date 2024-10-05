@@ -9,6 +9,10 @@
 	$: login = $page.data.session?.user?.email?.split('@')[0]
 	let calendar: any;
 	
+	function addBooking(booking: any) {
+		calendar.addEvent(booking);
+	};
+
 	onMount(() => {
 		calendar = new Calendar({
 		target: document.getElementById('ec'),
@@ -19,16 +23,18 @@
 				nowIndicator: true,
 				selectable: true,
 				slotEventOverlap: true,
+				eventBackgroundColor: "#D6EFEE",
 				eventClick: (event: any) => {
-					if (event.event.title === login)
+					if (event.event.title.html === `<p class="font-bold">${login}</p>`)
 					calendar.removeEventById(event.event.id);
 				},
 				select: (info: any) => {
 					let overlap: boolean = false;
 					const booking = {
-						title: email?.split('@')[0],
+						title: {html: `<p class="font-bold">${email?.split('@')[0]}</p>`},
 						start: info.start,
-						end: info.end
+						end: info.end,
+						style: "border: 2px solid #00C4C7; color: #00C4C7"
 					}
 					const booked = calendar.getEvents();
 					for (let i: number = 0; i < booked.length; i++) {
@@ -36,8 +42,11 @@
 							overlap = true;
 						if (booking.end > booked[i].start && booking.end < booked[i].end)
 							overlap = true;
+						if (booked[i].start > booking.start && booked[i].start < booking.end)
+							overlap = true;
+							if (booked[i].end > booking.start && booked[i].end < booking.end)
+							overlap = true;
 					}
-					console.log(overlap);
 					if (!overlap)
 						addBooking(booking);
 				},
@@ -46,11 +55,6 @@
 		}
 	});
 });
-
-function addBooking(booking: any) {
-		calendar.addEvent(booking);
-		console.log(booking);
-	};
  </script>
 
-<div id="ec"></div>
+<div id="ec" class="text-xs"></div>
