@@ -13,7 +13,7 @@
 <Schedule />
 </div>
 {:else}
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 text-center">
 	<h1 class="text-4xl">Big Brain Booth</h1>
 	<button class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-20">
 		<SignIn provider="42-school" signInPage="signin" className="w-full">
