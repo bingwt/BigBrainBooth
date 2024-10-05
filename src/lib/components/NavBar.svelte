@@ -3,6 +3,10 @@
 	import { page } from "$app/stores";
 	import { signOut } from '@auth/sveltekit/client';
 
+	$: email = $page.data?.session?.user?.email;
+	$: login = $page.data.session?.user?.email?.split('@')[0];
+	$: image = $page.data.session?.user?.image;
+
 	const handleSignOut = () => {
      signOut();
  }
@@ -15,33 +19,21 @@
 		</a>
 	</div>
 	<div class="flex-none">
-		<div class="dropdown dropdown-end">
-			<div
-			  tabindex="0"
-			  class="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
-			  <div class="card-body">
-				<span class="text-lg font-bold">8 Items</span>
-				<span class="text-info">Subtotal: $999</span>
-				<div class="card-actions">
-				  <button class="btn btn-primary btn-block">View cart</button>
-				</div>
-			  </div>
-			</div>
-		  </div>
 		  {#if $page.data.session}
 		  <div class="dropdown dropdown-end">
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-			  <div class="w-10 rounded-full">
+			  <div class="w-12 rounded-full">
 				<img
-					src={$page.data.session?.user?.image}
-					alt={$page.data.session?.user?.image}
+					src={image}
+					alt={image}
 				/>
 			  </div>
 			</div>
 			<ul
 			  tabindex="0"
 			  class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-			  <li><a class="hover:text-error" on:click={handleSignOut}>Sign Out</a></li>
+			  <li><a href="https://profile.intra.42.fr/users/{login}" target="_blank" class="hover:text-accent">View my profile</a></li>
+			  <li><a class="hover:text-error" on:click={handleSignOut}>Logout</a></li>
 			</ul>
 		  </div>
 		  {/if}

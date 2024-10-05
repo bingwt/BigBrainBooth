@@ -1,16 +1,41 @@
 <script lang="ts">
 	import { SignIn } from "@auth/sveltekit/components"
 	import { page } from "$app/stores";
-	import Schedule from "$lib/components/Schedule.svelte";
+	import { onMount } from "svelte";
+	import { pb } from "$lib/pocketbase";
 	
 	$: email = $page.data?.session?.user?.email;
-	$: login = $page.data.session?.user?.email?.split('@')[0]
+	$: login = $page.data.session?.user?.email?.split('@')[0];
+	let reserved: string = "";
+	let start: any;
+	let end: any;
+
+	onMount(async () => {
+		const records = await pb.collection('42_bbb').getFullList({
+    		sort: '-created',
+		});
+		let now: any = new Date().toISOString();
+
+		for (let i: number = 0; i < records.length; i++) {
+			if (now > new Date(records[i].start).toISOString() && now < new Date(records[i].end).toISOString()) {
+				reserved = records[i].login;
+				start = new Date(records[i].start);
+				end = new Date(records[i].end);
+			}
+		}
+	});
  </script>
 
 {#if $page.data.session}
-<div class="flex flex-col gap-4 p-0 w-full">
-<h1 class="text-4xl">Welcome, <span class="font-bold">{login}</span></h1>
-<Schedule />
+<div class="flex flex-col gap-4 justify-between p-0 w-full text-3xl sm:text-4xl">
+<h1>Welcome, <span class="font-bold">{login}</span></h1>
+{#if reserved === ""}
+<h1>The <span class="font-bold">Big Brain Booth</span> is <span class="text-success font-bold">AVAILABLE</span></h1>
+{:else}
+<h1>The <span class="font-bold">Big Brain Booth</span> is <span class="text-error font-bold">RESERVED</span> by  <a href="https://profile.intra.42.fr/users/{reserved}" target="_blank" class="underline text-secondary font-bold">{reserved}</a></h1>
+<h1>From <span class="text-accent font-bold">{start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h1>
+{/if}
+<a href="/booking" class="btn btn-secondary text-primary hover:btn-warning hover:text-primary font-satoshi font-bold p-4 h-8">Reserve</a>
 </div>
 {:else}
 <div class="flex flex-col gap-4 text-center">
