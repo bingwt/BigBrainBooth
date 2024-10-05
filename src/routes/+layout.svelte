@@ -11,7 +11,7 @@
 	{/if}
 	<div class="hero bg-primary min-h-screen font-satoshi over">
 		<div class="hero-content overflow-scroll">
-			<div class=" max-w-full">
+			<div class="w-[90dvw] mt-12">
 				<slot />
 			</div>
 		</div>

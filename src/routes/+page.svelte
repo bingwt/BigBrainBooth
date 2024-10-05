@@ -8,7 +8,7 @@
  </script>
 
 {#if $page.data.session}
-<div class="flex flex-col gap-4 mt-12 p-0 w-[90dvw]">
+<div class="flex flex-col gap-4 p-0 w-full">
 <h1 class="text-4xl">Welcome, <span class="font-bold">{login}</span></h1>
 <Schedule />
 </div>
