@@ -6,6 +6,7 @@
 {#if $page.data.session}
 <h1 class="text-4xl">Welcome, <span class="font-bold">{$page.data.session?.user?.email?.split('@')[0]}</span></h1>
 {:else}
+<h1 class="text-4xl">Big Brain Booth</h1>
 <button class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-20">
 	<SignIn provider="42-school" signInPage="signin" className="w-full">
 		<div slot="submitButton" class="flex flex-col place-items-center justify-center">
