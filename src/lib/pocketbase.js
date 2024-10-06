@@ -19,6 +19,7 @@ export async function checkReservation() {
 			return (reservation)
 		}
 	}
+	return { reserved: ""}
 }
 
 export async function listReservation() {

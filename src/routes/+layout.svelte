@@ -1,7 +1,6 @@
 <script>
 	import "../app.css";
 	import { dark_mode } from "$lib/stores";
-	import { page } from "$app/stores";
 	import NavBar from "$lib/components/NavBar.svelte";
 </script>
   

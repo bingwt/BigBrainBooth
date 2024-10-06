@@ -2,21 +2,20 @@
 	import { page } from "$app/stores";
 	/** @type {import('./$types').PageData} */
 	export let data: any;
-	let reserved: string;
+	let reserved: string = "";
 	let start: any;
 	let end: any;
 
-	$: email = $page.data?.session?.user?.email;
-	$: login = $page.data.session?.user?.email?.split('@')[0];
-	reserved = data.reserved;
+	$: login = $page.data?.user?.login;
+	reserved = $page.data?.reservations?.reserved;
 	if (reserved) {
-		start = data.start;
-		end = data.end;
+		start = $page.data?.reservations?.start;
+		end = $page.data?.reservations?.end;
 	}
 
  </script>
 
-{#if $page.data.session}
+{#if login}
 <div class="flex flex-col gap-4 justify-between p-0 w-full text-3xl sm:text-4xl">
 <h1>Welcome, <span class="font-bold">{login}</span></h1>
 {#if reserved === ""}

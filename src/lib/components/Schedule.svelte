@@ -5,8 +5,7 @@
 	import Interaction from '@event-calendar/interaction';
 	import { onMount } from "svelte";
 	
-	$: email = $page.data?.session?.user?.email;
-	$: login = $page.data.session?.user?.email?.split('@')[0];
+	$: login = $page.data?.user?.login;
 	let calendar: any;
 	let overlap: boolean = false;
 	
@@ -129,7 +128,7 @@
 				},
 				select: (info: any) => {
 					const booking = {
-						title: {html: `<p class="font-bold">${email?.split('@')[0]}</p>`},
+						title: {html: `<p class="font-bold">${login}</p>`},
 						start: info.start,
 						end: info.end,
 						style: "border: 2px solid #00C4C7; color: #00C4C7"
