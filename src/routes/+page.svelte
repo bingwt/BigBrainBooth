@@ -1,39 +1,15 @@
 <script lang="ts">
 	import { SignIn } from "@auth/sveltekit/components"
 	import { page } from "$app/stores";
-	import { onMount } from "svelte";
-	import { pb } from "$lib/pocketbase";
-	
+	/** @type {import('./$types').PageData} */
+	export let data: any;
+
 	$: email = $page.data?.session?.user?.email;
 	$: login = $page.data.session?.user?.email?.split('@')[0];
-	let reserved: string = "";
-	let start: any;
-	let end: any;
+	let reserved: string = data.reserved;
+	let start: any = data.start;
+	let end: any = data.end;
 
-	async function checkReservation() {
-		const records = await pb.collection('42_bbb').getFullList({
-    		sort: '-created',
-		});
-		let now: any = new Date().toISOString();
-
-		for (let i: number = 0; i < records.length; i++) {
-			if (now >= new Date(records[i].start).toISOString() && now <= new Date(records[i].end).toISOString()) {
-				reserved = records[i].login;
-				start = new Date(records[i].start);
-				end = new Date(records[i].end);
-			}
-		}
-	}
-
-	onMount(async () => {
-		await checkReservation();
-		setInterval(async () => {
-			const now: any = new Date();
-
-			if (now.getSeconds === 0 && (now.getMinutes() === 0 || now.getMinutes() === 30))
-				await checkReservation();
-		}, 1000)
-	});
  </script>
 
 {#if $page.data.session}
