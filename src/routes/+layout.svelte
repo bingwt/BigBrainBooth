@@ -6,9 +6,7 @@
 </script>
   
 <main data-theme={$dark_mode ? "dark" : "light"}>
-	{#if $page.data.session}
 	<NavBar />
-	{/if}
 	<div class="hero bg-primary min-h-screen font-satoshi over">
 		<div class="hero-content overflow-scroll">
 			<div class="w-[90dvw] mt-12">
