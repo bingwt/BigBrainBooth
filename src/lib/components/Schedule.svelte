@@ -144,7 +144,7 @@
 							if (booked[i].end > booking.start && booked[i].end < booking.end)
 							overlap = true;
 					}
-					if (!overlap) {
+					if (!overlap && Object.keys($page.data).length != 0) {
 						addBooking(booking);
 						window.location.reload();
 					}
