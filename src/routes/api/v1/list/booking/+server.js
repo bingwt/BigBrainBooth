@@ -11,7 +11,6 @@ export async function GET() {
 			delete records[i]["collectionId"];
 			delete records[i]["collectionName"];
 			delete records[i]["created"];
-			delete records[i]["id"];
 			delete records[i]["title"];
 			delete records[i]["updated"];
 		}
