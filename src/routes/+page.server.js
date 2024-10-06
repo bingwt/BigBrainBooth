@@ -1,13 +1,13 @@
-import { error } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import { checkReservation } from '$lib/pocketbase';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
-	const post = await checkReservation();
+	const reservations = await checkReservation();
 
-	if (post) {
-		return post;
+	if (reservations) {
+		return reservations;
 	}
 
-	error(404, 'Not found');
+	return { reserved: "" };
 }

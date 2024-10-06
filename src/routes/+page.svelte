@@ -3,12 +3,17 @@
 	import { page } from "$app/stores";
 	/** @type {import('./$types').PageData} */
 	export let data: any;
+	let reserved: string;
+	let start: any;
+	let end: any;
 
 	$: email = $page.data?.session?.user?.email;
 	$: login = $page.data.session?.user?.email?.split('@')[0];
-	let reserved: string = data.reserved;
-	let start: any = data.start;
-	let end: any = data.end;
+	reserved = data.reserved;
+	if (reserved) {
+		start = data.start;
+		end = data.end;
+	}
 
  </script>
 
