@@ -20,3 +20,31 @@ export async function checkReservation() {
 		}
 	}
 }
+
+export async function listReservation() {
+	const records = await pb.collection('42_bbb').getFullList({
+		sort: '-created',
+	});
+	return (records);
+}
+
+// @ts-ignore
+export async function getReservation(id) {
+	const record = await pb.collection('42_bbb').getOne(id);
+	return (record);
+}
+
+// @ts-ignore
+export async function updateReservation(id, record) {
+	await pb.collection('42_bbb').update(id, record);
+}
+
+// @ts-ignore
+export async function createReservation(record) {
+	await pb.collection('42_bbb').create(record);
+}
+
+// @ts-ignore
+export async function deleteReservation(id) {
+	await pb.collection('42_bbb').delete(id);
+}

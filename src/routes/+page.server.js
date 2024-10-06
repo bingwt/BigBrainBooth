@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { pb, checkReservation } from '$lib/pocketbase';
+import { checkReservation } from '$lib/pocketbase';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
