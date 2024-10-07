@@ -28,7 +28,7 @@
 {:else}
 <form method="POST" action="?/submit" class="hero-content">
 	<div class="form-control flex flex-col gap-4 justify-between p-0 text-3xl sm:text-4xl w-[90dvw] max-w-md">
-		<h1 class="font-bold">Feedback</h1>
+		<h1 class="font-bold">{type === "feedback" ? "Feedback" : ""}{type === "feature" ? "Feature Request" : ""}{type === "bug" ? "Bug Report" : ""}</h1>
 		<fieldset id="title" class="flex flex-col gap-0">
 			<h2 class="font-bold text-lg">Title</h2>
 			<input type="text" name="title" placeholder="" class="input input-bordered" bind:value={title} />
@@ -62,19 +62,19 @@
 			<h2 class="font-bold text-lg">Type</h2>
 			<div class="form-control">
 				<label class="label cursor-pointer">
-				<span class="label-text">Feature Request</span>
-				<input type="radio" name="type" class="radio checked:bg-secondary" on:change={typeChange} value="feature" checked={type === "feature"} />
-				</label>
-			</div>
-			<div class="form-control">
-				<label class="label cursor-pointer">
 				<span class="label-text">Feedback</span>
 				<input type="radio" name="type" class="radio checked:bg-secondary" on:change={typeChange} value="feedback" checked={type === "feedback"} />
 				</label>
 			</div>
 			<div class="form-control">
 				<label class="label cursor-pointer">
-				<span class="label-text">Bug</span>
+				<span class="label-text">Feature Request</span>
+				<input type="radio" name="type" class="radio checked:bg-secondary" on:change={typeChange} value="feature" checked={type === "feature"} />
+				</label>
+			</div>
+			<div class="form-control">
+				<label class="label cursor-pointer">
+				<span class="label-text">Bug Report</span>
 				<input type="radio" name="type" class="radio checked:bg-secondary" on:change={typeChange} value="bug" checked={type === "bug"} />
 				</label>
 			</div>
