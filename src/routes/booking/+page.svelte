@@ -7,7 +7,7 @@
 
 {#if login}
 <div class="flex flex-col gap-4 p-4 w-full h-[90dvh]">
-	<h1 class="text-4xl">Resevation for <span class="font-bold">{login}</span></h1>
+	<h1 class="text-4xl">Reservation for <span class="font-bold">{login}</span></h1>
 	<div class="overflow-y-scroll p-4">
 		<Schedule />
 	</div>

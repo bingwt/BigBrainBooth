@@ -23,7 +23,7 @@
 			"allDay": false
 		};
 
-		fetch('/api/v1/create/booking', {
+		await fetch('/api/v1/create/booking', {
 			method: "POST",
 			body: JSON.stringify({
 				record: new_booking
@@ -126,7 +126,7 @@
 						});
 					}
 				},
-				select: (info: any) => {
+				select: async (info: any) => {
 					const booking = {
 						title: {html: `<p class="font-bold">${login}</p>`},
 						start: info.start,
@@ -145,8 +145,9 @@
 							overlap = true;
 					}
 					if (!overlap && Object.keys($page.data).length != 0) {
-						addBooking(booking);
+						await addBooking(booking).then(() => {
 						window.location.reload();
+						});
 					}
 				},
 				eventDrop: (event: any) => {
