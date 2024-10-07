@@ -103,6 +103,8 @@
 			plugins: [TimeGrid, Interaction],
 			options: {
 				view: 'timeGridWeek',
+				pointer: true,
+				slotDuration: "00:15:00",
 				nowIndicator: true,
 				selectable: true,
 				slotEventOverlap: true,
@@ -221,4 +223,4 @@
 });
  </script>
 
-<div id="ec" class="text-xs"></div>
+<div id="ec" class="text-sm"></div>
