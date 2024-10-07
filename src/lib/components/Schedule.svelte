@@ -214,9 +214,6 @@
 				unselect: () => {
 					overlap = false;
 				},
-				eventMouseEnter: (event: any) => {
-					console.log(event.event);
-				},
 				events: []
 			}
 		}
