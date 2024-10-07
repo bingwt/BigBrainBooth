@@ -1,6 +1,7 @@
 import PocketBase from 'pocketbase';
 
 export const pb = new PocketBase(import.meta.env.VITE_PB_URL);
+pb.autoCancellation(false);
 
 export async function checkReservation() {
 	let reservation;
@@ -48,4 +49,9 @@ export async function createReservation(record) {
 // @ts-ignore
 export async function deleteReservation(id) {
 	await pb.collection('42_bbb').delete(id);
+}
+
+// @ts-ignore
+export async function createFeedback(record) {
+	await pb.collection('42_bbb_feedback').create(record);
 }
