@@ -51,6 +51,15 @@ export async function deleteReservation(id) {
 	await pb.collection('42_bbb').delete(id);
 }
 
+export async function checkBBB() {
+	const records = await pb.collection('42_core').getFullList({
+		filter: 'location = "c2r1s15"',
+		fields: 'login'
+	});
+	return (records);
+}
+
+
 // @ts-ignore
 export async function createFeedback(record) {
 	await pb.collection('42_bbb_feedback').create(record);
