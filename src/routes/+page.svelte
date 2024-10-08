@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import { onMount } from "svelte";
+	import { pb } from "$lib/pocketbase"
 	/** @type {import('./$types').PageData} */
 	export let data: any;
 	let reserved: string = "";
@@ -19,6 +20,9 @@
 	}
 
 	onMount(async () => {
+		pb.collection('42_bbb').subscribe('*', function async () {
+			window.location.reload();
+		});
 		await fetch('/api/v1/check_availability/bbb')
 		.then(response => response.json())
 		.then(data => {

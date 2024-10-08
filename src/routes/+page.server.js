@@ -9,7 +9,6 @@ export async function load({ cookies }) {
 
     try {
         const session = JSON.parse(session_cookie);
-		console.log(reservations.reserved)
 		if (session && reservations.reserved === "") {
 			return {
 				user: session.user,
