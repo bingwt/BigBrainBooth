@@ -26,13 +26,16 @@ export async function checkReservation() {
 export async function listReservation() {
 	const records = await pb.collection('42_bbb').getFullList({
 		sort: '-created',
+		fields: 'id,login,start,end,allDay'
 	});
 	return (records);
 }
 
 // @ts-ignore
 export async function getReservation(id) {
-	const record = await pb.collection('42_bbb').getOne(id);
+	const record = await pb.collection('42_bbb').getOne(id, {
+		fields: 'id,login,start,end,allDay'
+	});
 	return (record);
 }
 
@@ -53,7 +56,7 @@ export async function deleteReservation(id) {
 
 export async function checkBBB() {
 	const records = await pb.collection('42_core').getFullList({
-		filter: 'location = "c2r1s15"',
+		filter: `location = "${import.meta.env.VITE_BBB_LOCATION}"`,
 		fields: 'login'
 	});
 	return (records);

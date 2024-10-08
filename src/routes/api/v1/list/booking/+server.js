@@ -7,13 +7,6 @@ export async function GET() {
 	let records = await listReservation();
 
 	if (records) {
-		for (let i = 0; i < Object.keys(records).length; i++) {
-			delete records[i]["collectionId"];
-			delete records[i]["collectionName"];
-			delete records[i]["created"];
-			delete records[i]["title"];
-			delete records[i]["updated"];
-		}
 		return json(records, { status: 201 });
 	}
 	error(404, 'Not found');
@@ -31,11 +24,6 @@ export async function POST({ request, cookies }) {
 	const record = await getReservation(id);
 
 	if (record) {
-		delete record["collectionId"];
-		delete record["collectionName"];
-		delete record["created"];
-		delete record["title"];
-		delete record["updated"];
 		return json(record, { status: 201 });
 	}
 	error(404, 'Not found');
