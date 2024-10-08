@@ -276,14 +276,16 @@ function refreshBooking() {
 			<a href="https://profile.intra.42.fr/users/{selected_event?.title?.login}" class="text-2xl font-bold text-accent">{selected_event?.title?.login}</a>
     		<h2><span class="font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h2>
 		</div>
+		{#if selected_event?.title?.description}
 		<div>
 			<h2 class="font-bold text-lg">Description</h2>
 			<p>{selected_event?.title?.description}</p>
 		</div>
+		{/if}
 		{#if selected_event?.title?.feedback}
 		<div>
 			<h2 class="font-bold text-lg">Feedback</h2>
-			<div class="flex flex-col gap-0 p-4 pt-6 pb-6 h-48 overflow-y-scroll border-2 border-secondary rounded-md">
+			<div class="flex flex-col gap-0 p-4 h-48 overflow-y-scroll">
 				{#each selected_event?.title?.feedback as entry, i}
 				<div class="flex flex-col gap-2">
 					<div>
