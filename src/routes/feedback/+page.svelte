@@ -20,6 +20,10 @@
 	}
  </script>
 
+<svelte:head>
+    <title>BBB - Feedback</title> 
+</svelte:head>
+
 {#if form?.success}
 <div class="hero-content flex flex-col">
 	<h1 class="text-4xl font-bold text-center">Thank you for your feedback!</h1>
