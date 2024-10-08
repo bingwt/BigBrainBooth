@@ -8,6 +8,7 @@
 	$: login = $page.data?.user?.login;
 	let calendar: any;
 	let overlap: boolean = false;
+	let selected_event: any;
 	
 	function listBookings(booking: any) {
 		calendar.addEvent(booking);
@@ -76,6 +77,24 @@
 	})
 }
 
+async function cancelBooking() {
+	if (selected_event?.title?.login === login) {
+		fetch('/api/v1/delete/booking', {
+			method: "POST",
+			body: JSON.stringify({
+				id: selected_event?.id
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+		.then(response => response.json())
+		.then(() => {
+			calendar.removeEventById(selected_event?.id);
+		});
+	}
+}
+
 	onMount(async () => {
 		let records: any;
 		fetch('/api/v1/list/booking')
@@ -85,7 +104,10 @@
 			for (let i: number = 0; i < records.length; i++) {
 				const booking = {
 					id: records[i].id,
-					title: {html: `<p class="font-bold">${records[i].login}</p>`},
+					title: {
+						html: `<p class="font-bold">${records[i].login}</p>`,
+						login: records[i].login
+					},
 					start: new Date(records[i].start),
 					end: new Date(records[i].end),
 					allDay: records[i].allDay,
@@ -111,23 +133,12 @@
 				eventBackgroundColor: "#D6EFEE",
 				allDaySlot: false,
 				eventClick: (event: any) => {
-					if (event.event.title.html === `<p class="font-bold">${login}</p>`) {
-						fetch('/api/v1/delete/booking', {
-							method: "POST",
-							body: JSON.stringify({
-								id: event.event.id
-							}),
-							headers: {
-								'Content-Type': 'application/json'
-							}
-						})
-						.then(response => response.json())
-						.then(() => {
-							calendar.removeEventById(event.event.id);
-							
-						});
-					}
+					selected_event = event.event;
+					document.getElementById("view-booking").showModal();
 				},
+				// eventMouseEnter: (event: any) => {
+				// 	selected_event = event.event;
+				// },
 				select: async (info: any) => {
 					const booking = {
 						title: {html: `<p class="font-bold">${login}</p>`},
@@ -160,7 +171,10 @@
 								for (let i: number = 0; i < records.length; i++) {
 									const booking = {
 										id: records[i].id,
-										title: {html: `<p class="font-bold">${records[i].login}</p>`},
+										title: {
+											html: `<p class="font-bold">${records[i].login}</p>`,
+											login: records[i].login
+										},
 										start: new Date(records[i].start),
 										end: new Date(records[i].end),
 										allDay: records[i].allDay,
@@ -224,3 +238,20 @@
  </script>
 
 <div id="ec" class="text-sm"></div>
+
+<dialog id="view-booking" class="modal">
+  <div class="modal-box rounded-md">
+    <h1 class="text-2xl font-bold">{selected_event?.title?.login}</h1>
+    <h2><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h2>
+	{#if selected_event?.title?.login === login}
+	<div class="modal-action">
+		<form method="dialog">
+			<button class="btn btn-secondary font-bold hover:btn-error hover:text-primary" on:click={cancelBooking}>Cancel</button>
+		</form>
+	</div>
+	{/if}
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
