@@ -7,8 +7,10 @@
 	
 	$: login = $page.data?.user?.login;
 	let calendar: any;
+	let records: any;
 	let overlap: boolean = false;
 	let selected_event: any;
+	let event_description: string;
 	
 	function listBookings(booking: any) {
 		calendar.addEvent(booking);
@@ -21,8 +23,11 @@
 			"end": booking.end,
 			"login": login,
 			"title": booking.title,
-			"allDay": false
+			"allDay": false,
+			"description": event_description
 		};
+		new_booking.title.description = event_description;
+		event_description = "";
 
 		await fetch('/api/v1/create/booking', {
 			method: "POST",
@@ -59,7 +64,8 @@
 			"end": booking.end,
 			"login": login,
 			"title": booking.title,
-			"allDay": false
+			"allDay": false,
+			"description": booking.description
 		};
 
 		if (record.login === login) {
@@ -95,8 +101,54 @@ async function cancelBooking() {
 	}
 }
 
+async function createBooking(booking: any) {
+	const booked = calendar.getEvents();
+	for (let i: number = 0; i < booked.length; i++) {
+		if (booking.start > booked[i].start && booking.start < booked[i].end)
+			overlap = true;
+		if (booking.end > booked[i].start && booking.end < booked[i].end)
+			overlap = true;
+		if (booked[i].start > booking.start && booked[i].start < booking.end)
+			overlap = true;
+			if (booked[i].end > booking.start && booked[i].end < booking.end)
+			overlap = true;
+	}
+	if (!overlap && Object.keys($page.data).length != 0) {
+		await addBooking(booking).then(() => {
+			const events = calendar.getEvents();
+
+			for (let i = 0; i < events.length; i++) {
+				calendar.removeEventById(events[i].id);
+			}
+			fetch('/api/v1/list/booking')
+			.then(response => response.json())
+			.then(data => {
+				records = data; 
+				for (let i: number = 0; i < records.length; i++) {
+					const booking = {
+						id: records[i].id,
+						title: {
+							html: `<p class="font-bold">${records[i].login}</p>`,
+							login: records[i].login,
+							description: records[i].description
+						},
+						start: new Date(records[i].start),
+						end: new Date(records[i].end),
+						allDay: records[i].allDay,
+						style: "border: 2px solid #00C4C7; color: #00C4C7"
+					}
+					listBookings(booking);
+					calendar.unselect();
+				}
+			})
+			.catch(error => {
+				console.error('Error fetching data:', error);
+			});
+		});
+	}
+}
+
 	onMount(async () => {
-		let records: any;
 		fetch('/api/v1/list/booking')
 		.then(response => response.json())
 		.then(data => {
@@ -106,7 +158,8 @@ async function cancelBooking() {
 					id: records[i].id,
 					title: {
 						html: `<p class="font-bold">${records[i].login}</p>`,
-						login: records[i].login
+						login: records[i].login,
+						description: records[i].description
 					},
 					start: new Date(records[i].start),
 					end: new Date(records[i].end),
@@ -138,58 +191,22 @@ async function cancelBooking() {
 				},
 				// eventMouseEnter: (event: any) => {
 				// 	selected_event = event.event;
+				// 	console.log(selected_event);
 				// },
 				select: async (info: any) => {
+					document.getElementById("create-booking").showModal();
 					const booking = {
-						title: {html: `<p class="font-bold">${login}</p>`},
+						title: {
+							html: `<p class="font-bold">${login}</p>`,
+							login: login,
+							description: ""
+						},
 						start: info.start,
 						end: info.end,
 						style: "border: 2px solid #00C4C7; color: #00C4C7"
 					}
-					const booked = calendar.getEvents();
-					for (let i: number = 0; i < booked.length; i++) {
-						if (booking.start > booked[i].start && booking.start < booked[i].end)
-							overlap = true;
-						if (booking.end > booked[i].start && booking.end < booked[i].end)
-							overlap = true;
-						if (booked[i].start > booking.start && booked[i].start < booking.end)
-							overlap = true;
-							if (booked[i].end > booking.start && booked[i].end < booking.end)
-							overlap = true;
-					}
-					if (!overlap && Object.keys($page.data).length != 0) {
-						await addBooking(booking).then(() => {
-							const events = calendar.getEvents();
-
-							for (let i = 0; i < events.length; i++) {
-								calendar.removeEventById(events[i].id);
-							}
-							fetch('/api/v1/list/booking')
-							.then(response => response.json())
-							.then(data => {
-								records = data; 
-								for (let i: number = 0; i < records.length; i++) {
-									const booking = {
-										id: records[i].id,
-										title: {
-											html: `<p class="font-bold">${records[i].login}</p>`,
-											login: records[i].login
-										},
-										start: new Date(records[i].start),
-										end: new Date(records[i].end),
-										allDay: records[i].allDay,
-										style: "border: 2px solid #00C4C7; color: #00C4C7"
-									}
-									listBookings(booking);
-									calendar.unselect();
-								}
-							})
-							.catch(error => {
-								console.error('Error fetching data:', error);
-							});
-						});
-					}
-					calendar.unselect();
+					selected_event = booking;					
+					// calendar.unselect();
 				},
 				eventDrop: (event: any) => {
 					const booked = calendar.getEvents();
@@ -240,9 +257,16 @@ async function cancelBooking() {
 <div id="ec" class="text-sm"></div>
 
 <dialog id="view-booking" class="modal">
-  <div class="modal-box rounded-md">
-    <h1 class="text-2xl font-bold">{selected_event?.title?.login}</h1>
-    <h2><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h2>
+  <div class="modal-box rounded-md">    
+	<div class="flex flex-col gap-4">
+		<div>
+			<h1 class="text-2xl font-bold">{selected_event?.title?.login}</h1>
+    		<h2><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h2>
+		</div>
+		<div>
+			<p>{selected_event?.title?.description}</p>
+		</div>
+	  </div> 
 	{#if selected_event?.title?.login === login}
 	<div class="modal-action">
 		<form method="dialog">
@@ -255,3 +279,28 @@ async function cancelBooking() {
     <button>close</button>
   </form>
 </dialog>
+
+<dialog id="create-booking" class="modal">
+	<div class="modal-box rounded-md">
+	  <h1 class="text-2xl font-bold">Create Event</h1>
+	  <div class="flex flex-col gap-4">
+		<div>
+			<!-- <h2 class="text-xl font-bold">{selected_event?.title?.login}</h2> -->
+			<h3><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h3>
+		</div>
+		<div>
+			<textarea class="textarea textarea-bordered rounded-md w-full" name="description" placeholder="" bind:value={event_description}></textarea>
+		</div>
+	  </div> 
+	  {#if selected_event?.title?.login === login}
+	  <div class="modal-action">
+		  <form method="dialog">
+			  <button class="btn btn-secondary font-bold hover:btn-accent hover:text-primary" on:click={() => createBooking(selected_event)}>Create</button>
+		  </form>
+	  </div>
+	  {/if}
+	</div>
+	<form method="dialog" class="modal-backdrop">
+	  <button on:click={() => event_description = ""}>close</button>
+	</form>
+  </dialog>
