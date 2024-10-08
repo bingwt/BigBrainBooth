@@ -4,6 +4,9 @@
     import TimeGrid from '@event-calendar/time-grid';
 	import Interaction from '@event-calendar/interaction';
 	import { onMount } from "svelte";
+
+	/** @type {import('./$types').ActionData} */
+	let form;
 	
 	$: login = $page.data?.user?.login;
 	let calendar: any;
@@ -11,6 +14,7 @@
 	let overlap: boolean = false;
 	let selected_event: any;
 	let event_description: string;
+	let event_feedback: string;
 	
 	function listBookings(booking: any) {
 		calendar.addEvent(booking);
@@ -276,6 +280,12 @@ async function createBooking(booking: any) {
 			<button class="btn btn-secondary font-bold hover:btn-error hover:text-primary" on:click={cancelBooking}>Cancel</button>
 		</form>
 	</div>
+	{:else if typeof(login) !== "undefined"}
+	<div class="modal-action">
+		<form method="">
+			<button class="btn btn-secondary font-bold hover:btn-warning hover:text-primary" on:click={() => document.getElementById("feedback-booking").showModal()}>Feedback</button>
+		</form>
+	</div>
 	{/if}
   </div>
   <form method="dialog" class="modal-backdrop">
@@ -306,5 +316,39 @@ async function createBooking(booking: any) {
 	</div>
 	<form method="dialog" class="modal-backdrop">
 	  <button on:click={() => event_description = ""}>close</button>
+	</form>
+  </dialog>
+
+  <dialog id="feedback-booking" class="modal">
+	<div class="modal-box rounded-md">
+	  <h1 class="text-2xl font-bold">Feedback {selected_event?.title?.login}'s Event</h1>
+	  <div class="flex flex-col gap-4">
+		<div>
+			<!-- <h2 class="text-xl font-bold">{selected_event?.title?.login}</h2> -->
+			<h3><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h3>
+		</div>
+		<div class="flex flex-col gap-2">
+			<form method="POST" action="?/submit">
+				<div class="form-control flex flex-col gap-4 text-3xl sm:text-4xl w-full">
+					{#if form?.success}
+					<h1 class="text-4xl font-bold text-center">Thank you for your feedback!</h1>
+					{:else}
+					<fieldset id="id" class="flex flex-col gap-0">
+						<textarea name="id" hidden contenteditable=false value={selected_event?.id}></textarea>
+					</fieldset>
+					<fieldset id="feedback" class="flex flex-col gap-0">
+						<textarea class="textarea textarea-bordered" name="feedback" placeholder="" bind:value={event_feedback}></textarea>
+					</fieldset>
+					{/if}
+				</div>
+				<div class="modal-action">
+					  <button class="btn btn-secondary font-bold hover:btn-accent hover:text-primary" disabled={event_feedback ? false : true}>Submit</button>
+				</div>
+			</form>
+		</div>
+	  </div>
+	</div>
+	<form method="dialog" class="modal-backdrop">
+	  <button on:click={() => event_feedback = ""}>close</button>
 	</form>
   </dialog>
