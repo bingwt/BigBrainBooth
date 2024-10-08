@@ -87,7 +87,7 @@
 	})
 }
 
-async function cancelBooking() {
+async function removeBooking() {
 	if (selected_event?.title?.login === login) {
 		fetch('/api/v1/delete/booking', {
 			method: "POST",
@@ -119,37 +119,42 @@ async function createBooking(booking: any) {
 	}
 	if (!overlap && Object.keys($page.data).length != 0) {
 		await addBooking(booking).then(() => {
-			const events = calendar.getEvents();
-
-			for (let i = 0; i < events.length; i++) {
-				calendar.removeEventById(events[i].id);
-			}
-			fetch('/api/v1/list/booking')
-			.then(response => response.json())
-			.then(data => {
-				records = data; 
-				for (let i: number = 0; i < records.length; i++) {
-					const booking = {
-						id: records[i].id,
-						title: {
-							html: `<p class="font-bold">${records[i].login}</p>`,
-							login: records[i].login,
-							description: records[i].description
-						},
-						start: new Date(records[i].start),
-						end: new Date(records[i].end),
-						allDay: records[i].allDay,
-						style: "border: 2px solid #00C4C7; color: #00C4C7"
-					}
-					listBookings(booking);
-					calendar.unselect();
-				}
-			})
-			.catch(error => {
-				console.error('Error fetching data:', error);
-			});
+			refreshBooking();
 		});
 	}
+}
+
+function refreshBooking() {
+	const events = calendar.getEvents();
+
+	for (let i = 0; i < events.length; i++) {
+		calendar.removeEventById(events[i].id);
+	}
+	fetch('/api/v1/list/booking')
+	.then(response => response.json())
+	.then(data => {
+		records = data; 
+		for (let i: number = 0; i < records.length; i++) {
+			const booking = {
+				id: records[i].id,
+				title: {
+					html: `<p class="font-bold">${records[i].login}</p>`,
+					login: records[i].login,
+					description: records[i].description,
+					feedback: records[i].feedback
+				},
+				start: new Date(records[i].start),
+				end: new Date(records[i].end),
+				allDay: records[i].allDay,
+				style: "border: 2px solid #00C4C7; color: #00C4C7"
+			}
+			listBookings(booking);
+			calendar.unselect();
+		}
+	})
+	.catch(error => {
+		console.error('Error fetching data:', error);
+	});
 }
 
 	onMount(async () => {
@@ -163,7 +168,8 @@ async function createBooking(booking: any) {
 					title: {
 						html: `<p class="font-bold">${records[i].login}</p>`,
 						login: records[i].login,
-						description: records[i].description
+						description: records[i].description,
+						feedback: records[i].feedback
 					},
 					start: new Date(records[i].start),
 					end: new Date(records[i].end),
@@ -267,23 +273,44 @@ async function createBooking(booking: any) {
   <div class="modal-box rounded-md">    
 	<div class="flex flex-col gap-4">
 		<div>
-			<h1 class="text-2xl font-bold">{selected_event?.title?.login}</h1>
-    		<h2><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h2>
+			<a href="https://profile.intra.42.fr/users/{selected_event?.title?.login}" class="text-2xl font-bold text-accent">{selected_event?.title?.login}</a>
+    		<h2><span class="font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h2>
 		</div>
 		<div>
+			<h2 class="font-bold text-lg">Description</h2>
 			<p>{selected_event?.title?.description}</p>
 		</div>
-	  </div> 
+		{#if selected_event?.title?.feedback}
+		<div>
+			<h2 class="font-bold text-lg">Feedback</h2>
+			<div class="flex flex-col gap-0 p-4 pt-6 pb-6 h-48 overflow-y-scroll border-2 border-secondary rounded-md">
+				{#each selected_event?.title?.feedback as entry, i}
+				<div class="flex flex-col gap-2">
+					<div>
+						<h3><a href="https://profile.intra.42.fr/users/{entry.login}" class="font-bold text-accent">{entry.login}'s</a> feedback from <span class="font-bold">{new Date(entry.date).toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</span></h3>
+					</div>
+					<div>
+						{entry.description}
+					</div>
+				</div>
+				{#if i !== selected_event?.title?.feedback?.length - 1}
+				<div class="divider divider-neutral"></div>
+				{/if}
+				{/each}
+			</div>
+		</div>
+		{/if}
+	  </div>
 	{#if selected_event?.title?.login === login}
 	<div class="modal-action">
 		<form method="dialog">
-			<button class="btn btn-secondary font-bold hover:btn-error hover:text-primary" on:click={cancelBooking}>Cancel</button>
+			<button class="btn btn-secondary font-bold hover:btn-error hover:text-primary" on:click={removeBooking}>Remove</button>
 		</form>
 	</div>
 	{:else if typeof(login) !== "undefined"}
 	<div class="modal-action">
 		<form method="">
-			<button class="btn btn-secondary font-bold hover:btn-warning hover:text-primary" on:click={() => document.getElementById("feedback-booking").showModal()}>Feedback</button>
+			<button class="btn btn-secondary font-bold hover:btn-warning hover:text-primary" on:click={() => document.getElementById("feedback-booking").showModal()}>Give Feedback</button>
 		</form>
 	</div>
 	{/if}
@@ -342,7 +369,7 @@ async function createBooking(booking: any) {
 					{/if}
 				</div>
 				<div class="modal-action">
-					  <button class="btn btn-secondary font-bold hover:btn-accent hover:text-primary" disabled={event_feedback ? false : true}>Submit</button>
+					  <button class="btn btn-secondary font-bold hover:btn-accent hover:text-primary" disabled={event_feedback ? false : true} on:click={refreshBooking}>Submit</button>
 				</div>
 			</form>
 		</div>

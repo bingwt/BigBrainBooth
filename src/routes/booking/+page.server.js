@@ -28,7 +28,7 @@ export const actions = {
         record.feedback = [
             {
                 login: session.user.login,
-                created_at: new Date().toISOString(),
+                date: new Date().toISOString(),
                 description: data.get("feedback"),
             },
             ...record.feedback
