@@ -194,6 +194,10 @@ async function createBooking(booking: any) {
 				// 	console.log(selected_event);
 				// },
 				select: async (info: any) => {
+					if (typeof login === 'undefined') {
+						calendar.unselect();
+						return ;
+					}
 					document.getElementById("create-booking").showModal();
 					const booking = {
 						title: {
@@ -206,7 +210,6 @@ async function createBooking(booking: any) {
 						style: "border: 2px solid #00C4C7; color: #00C4C7"
 					}
 					selected_event = booking;					
-					// calendar.unselect();
 				},
 				eventDrop: (event: any) => {
 					const booked = calendar.getEvents();
@@ -288,7 +291,8 @@ async function createBooking(booking: any) {
 			<!-- <h2 class="text-xl font-bold">{selected_event?.title?.login}</h2> -->
 			<h3><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h3>
 		</div>
-		<div>
+		<div class="flex flex-col gap-2">
+			<h2 class="font-bold text-lg">Description</h2>
 			<textarea class="textarea textarea-bordered rounded-md w-full" name="description" placeholder="" bind:value={event_description}></textarea>
 		</div>
 	  </div> 

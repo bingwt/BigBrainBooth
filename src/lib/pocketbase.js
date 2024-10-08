@@ -11,6 +11,7 @@ export async function checkReservation() {
 	let now = new Date().toISOString();
 
 	for (let i = 0; i < records.length; i++) {
+		console.log(records[i])
 		if (now >= new Date(records[i].start).toISOString() && now <= new Date(records[i].end).toISOString()) {
 			reservation = {
 				reserved: records[i].login,
