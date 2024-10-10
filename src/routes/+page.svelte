@@ -43,7 +43,7 @@
 
 {#if login}
 <div class="flex flex-col gap-4 justify-between p-0 w-full text-3xl sm:text-4xl">
-<h1>Welcome, <span class="font-bold">{login}</span></h1>
+<h1>Welcome <span class="font-bold">{login}</span>,</h1>
 {#if reserved === ""}
 <h1>The <span class="font-bold">Big Brain Booth</span> is <span class="text-success font-bold">AVAILABLE</span></h1>
 {:else}
@@ -65,6 +65,9 @@
 	{/if}
 	<a href="/booking" class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-20">
 		<p>View Schedule</p>
+	</a>
+	<a href="/faq" class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-20">
+		<p>FAQ</p>
 	</a>
 </div>
 {/if}

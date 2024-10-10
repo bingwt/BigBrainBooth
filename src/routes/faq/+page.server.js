@@ -11,6 +11,6 @@ export function load({ cookies }) {
             user: session.user
         };
     } catch (error) {
-        redirect(301, "/signin")
+        // redirect(301, "/signin")
     }
 }
