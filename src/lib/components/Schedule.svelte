@@ -331,6 +331,7 @@ function refreshBooking() {
 		{#if selected_event?.title?.feedback}
 		<div>
 			<h2 class="font-bold text-lg">Feedback</h2>
+			{#if login}
 			<div class="flex flex-col gap-0 p-4 h-48 overflow-y-scroll">
 				{#each selected_event?.title?.feedback as entry, i}
 				<div class="flex flex-col gap-2">
@@ -346,6 +347,9 @@ function refreshBooking() {
 				{/if}
 				{/each}
 			</div>
+			{:else}
+			<p class="p-4"><a href="/signin" class="font-bold underline">Sign in</a> to view feedback.</p>
+			{/if}
 		</div>
 		{/if}
 	  </div>
