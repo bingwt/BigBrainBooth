@@ -351,7 +351,10 @@ function refreshBooking() {
 	  </div>
 	{#if selected_event?.title?.login === login}
 	<div class="modal-action">
-	<button class="btn btn-secondary font-bold hover:btn-warning hover:text-primary" on:click={() => document.getElementById("edit-booking").showModal()}>Edit</button>
+	<button class="btn btn-secondary font-bold hover:btn-warning hover:text-primary" on:click={() => {
+		event_description = selected_event.title.description;
+		document.getElementById("edit-booking").showModal();
+		}}>Edit</button>
 		<form method="dialog">
 			<button class="btn btn-secondary font-bold hover:btn-error hover:text-primary" on:click={removeBooking}>Remove</button>
 		</form>
