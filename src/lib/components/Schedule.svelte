@@ -279,16 +279,16 @@ function refreshBooking() {
 });
  </script>
 
-<div class="toast toast-top toast-end mt-14 text-sm">
+<div class="toast toast-top toast-end mt-14 text-sm fixed z-20">
 	{#if notify_create}
 	<div in:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }} out:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
-	class="alert rounded-md text-success">
+	class="alert rounded-md text-success bg-primary">
 	  <span>Slot has been created</span>
 	</div>
 	{/if}
 	{#if notify_destroy}
 	<div in:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }} out:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
-	class="alert rounded-md text-error">
+	class="alert rounded-md text-error bg-primary">
 	  <span>Slot has been destroyed</span>
 	</div>
 	{/if}
