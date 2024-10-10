@@ -78,9 +78,9 @@
 			"login": login,
 			"title": booking.title,
 			"allDay": false,
-			"description": booking.description
+			"description": event_description ? event_description : booking.description
 		};
-
+		event_description = "";
 		if (record.login === login) {
 			fetch('/api/v1/update/booking', {
 				method: "POST",
@@ -285,6 +285,10 @@ function refreshBooking() {
 			}
 		}
 	});
+	document.onkeydown = function(event) {
+		if (event.key === "Escape")
+			calendar.unselect();
+	};
 });
  </script>
 
@@ -347,6 +351,7 @@ function refreshBooking() {
 	  </div>
 	{#if selected_event?.title?.login === login}
 	<div class="modal-action">
+	<button class="btn btn-secondary font-bold hover:btn-warning hover:text-primary" on:click={() => document.getElementById("edit-booking").showModal()}>Edit</button>
 		<form method="dialog">
 			<button class="btn btn-secondary font-bold hover:btn-error hover:text-primary" on:click={removeBooking}>Remove</button>
 		</form>
@@ -376,7 +381,7 @@ function refreshBooking() {
 			<h2 class="font-bold text-lg">Description</h2>
 			<textarea class="textarea textarea-bordered rounded-md w-full" name="description" placeholder="" bind:value={event_description}></textarea>
 		</div>
-	  </div> 
+	  </div>
 	  {#if selected_event?.title?.login === login}
 	  <div class="modal-action">
 		  <form method="dialog">
@@ -421,5 +426,31 @@ function refreshBooking() {
 	</div>
 	<form method="dialog" class="modal-backdrop">
 	  <button on:click={() => event_feedback = ""}>close</button>
+	</form>
+  </dialog>
+
+  <dialog id="edit-booking" class="modal">
+	<div class="modal-box rounded-md">
+	  <h1 class="text-2xl font-bold">Edit Event</h1>
+	  <div class="flex flex-col gap-4">
+		<div>
+			<!-- <h2 class="text-xl font-bold">{selected_event?.title?.login}</h2> -->
+			<h3><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h3>
+		</div>
+		<div class="flex flex-col gap-2">
+			<h2 class="font-bold text-lg">Description</h2>
+			<textarea class="textarea textarea-bordered rounded-md w-full" name="description" placeholder="" bind:value={event_description}></textarea>
+		</div>
+	  </div>
+	  {#if selected_event?.title?.login === login}
+	  <div class="modal-action">
+		  <form method="dialog">
+			  <button class="btn btn-secondary font-bold hover:btn-accent hover:text-primary" on:click={() => updateBooking(selected_event)}>Update</button>
+		  </form>
+	  </div>
+	  {/if}
+	</div>
+	<form method="dialog" class="modal-backdrop">
+	  <button>close</button>
 	</form>
   </dialog>
