@@ -209,8 +209,26 @@ function refreshBooking() {
 				eventBackgroundColor: "#D6EFEE",
 				allDaySlot: false,
 				eventClick: (event: any) => {
+					if (!login) {
+						selected_event = event.event;
+						document.getElementById("view-booking").showModal();
+						return ;
+					}
+					fetch('/api/v1/list/booking', {
+					method: "POST",
+					body: JSON.stringify({
+						id: event.event.id
+					}),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				.then(response => response.json())
+				.then(data => {
 					selected_event = event.event;
+					selected_event.title.feedback = data.feedback;
 					document.getElementById("view-booking").showModal();
+				})
 				},
 				// eventMouseEnter: (event: any) => {
 				// 	selected_event = event.event;

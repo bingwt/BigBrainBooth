@@ -26,7 +26,7 @@ export async function checkReservation() {
 export async function listReservation() {
 	const records = await pb.collection('42_bbb').getFullList({
 		sort: '-created',
-		fields: 'id,login,start,end,allDay,description,feedback'
+		fields: 'id,login,start,end,allDay,description'
 	});
 	return (records);
 }
