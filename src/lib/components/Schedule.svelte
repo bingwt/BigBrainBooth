@@ -4,6 +4,8 @@
     import TimeGrid from '@event-calendar/time-grid';
 	import Interaction from '@event-calendar/interaction';
 	import { onMount } from "svelte";
+	import { slide } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 
 	/** @type {import('./$types').ActionData} */
 	let form;
@@ -15,6 +17,8 @@
 	let selected_event: any;
 	let event_description: string;
 	let event_feedback: string;
+	let notify_create: boolean = false;
+	let notify_destroy: boolean = false;
 	
 	function listBookings(booking: any) {
 		calendar.addEvent(booking);
@@ -46,6 +50,10 @@
 		.then(() => {
 			// calendar.addEvent(booking);
 			overlap = false;
+			notify_create = true;
+			setTimeout(() => {
+				notify_create = false;
+			}, 4000);
 		});
 	};
 
@@ -101,6 +109,10 @@ async function removeBooking() {
 		.then(response => response.json())
 		.then(() => {
 			calendar.removeEventById(selected_event?.id);
+			notify_destroy = true;
+			setTimeout(() => {
+				notify_destroy = false;
+			}, 4000);
 		});
 	}
 }
@@ -266,6 +278,21 @@ function refreshBooking() {
 	});
 });
  </script>
+
+<div class="toast toast-top toast-end mt-14 text-sm">
+	{#if notify_create}
+	<div in:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }} out:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
+	class="alert rounded-md text-success">
+	  <span>Slot has been created</span>
+	</div>
+	{/if}
+	{#if notify_destroy}
+	<div in:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }} out:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
+	class="alert rounded-md text-error">
+	  <span>Slot has been destroyed</span>
+	</div>
+	{/if}
+</div>
 
 <div id="ec" class="text-sm"></div>
 
