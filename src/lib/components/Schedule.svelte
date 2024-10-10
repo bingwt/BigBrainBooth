@@ -19,6 +19,7 @@
 	let event_feedback: string;
 	let notify_create: boolean = false;
 	let notify_destroy: boolean = false;
+	let notify_too_long: boolean = false;
 	
 	function listBookings(booking: any) {
 		calendar.addEvent(booking);
@@ -220,6 +221,14 @@ function refreshBooking() {
 						calendar.unselect();
 						return ;
 					}
+					if (info.end - info.start >= 14400000) {
+						calendar.unselect();
+						notify_too_long = true;
+						setTimeout(() => {
+						notify_too_long = false;
+					}, 4000);
+						return ;
+					}
 					document.getElementById("create-booking").showModal();
 					const booking = {
 						title: {
@@ -290,6 +299,12 @@ function refreshBooking() {
 	<div in:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }} out:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
 	class="alert rounded-md text-error bg-primary">
 	  <span>Slot has been destroyed</span>
+	</div>
+	{/if}
+	{#if notify_too_long}
+	<div in:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }} out:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
+	class="alert rounded-md text-warning bg-primary">
+	  <span>Slot is too long</span>
 	</div>
 	{/if}
 </div>
