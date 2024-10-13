@@ -493,11 +493,16 @@ function refreshBooking() {
 }
 
 :global(.ec-button.ec-today) {
-	@apply bg-[#7BD9DA] text-primary
+	@apply bg-accent text-primary border-none hover:bg-accent hover:text-primary
+}
+
+:global(.ec-button:disabled),
+:global(.ec-button[disabled]) {
+	@apply opacity-50 cursor-not-allowed;
 }
 
 :global(.ec-button.ec-prev) {
-	@apply bg-[#EBEBEB] text-secondary border-none mr-1 rounded-md
+	@apply bg-[#EBEBEB] text-secondary border-none mr-1
 }
 
 :global(.ec-button.ec-next) {
