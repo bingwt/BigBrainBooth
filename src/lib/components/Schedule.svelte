@@ -201,6 +201,7 @@ function refreshBooking() {
 			plugins: [TimeGrid, Interaction],
 			options: {
 				view: 'timeGridWeek',
+				scrollTime: new Date().toTimeString(),
 				pointer: true,
 				slotDuration: "00:15:00",
 				nowIndicator: true,
@@ -479,3 +480,39 @@ function refreshBooking() {
 	  <button>close</button>
 	</form>
   </dialog>
+
+<style>
+
+:global(.ec) {
+	--ec-now-indicator-color: theme('colors.error');
+	--ec-today-bg-color: rgba(230, 178, 145, 0);
+}
+
+:global(.ec-title) {
+	@apply text-lg font-bold text-accent;
+}
+
+:global(.ec-button.ec-today) {
+	@apply bg-[#7BD9DA] text-primary
+}
+
+:global(.ec-button.ec-prev) {
+	@apply bg-[#EBEBEB] text-secondary border-none mr-1 rounded-md
+}
+
+:global(.ec-button.ec-next) {
+	@apply bg-[#EBEBEB] text-secondary border-none ml-1 rounded-md
+}
+
+:global(.ec-days) {
+	@apply text-xs font-bold text-accent;
+}
+
+:global(.ec-sidebar) {
+	@apply text-xs font-bold text-accent;
+}
+
+:global(.ec-body) {
+	@apply h-[75dvh] overflow-y-scroll
+}
+</style>
