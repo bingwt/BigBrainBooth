@@ -170,6 +170,20 @@ function refreshBooking() {
 	});
 }
 
+	function checkOverlap(event: any) {
+		const booked = calendar.getEvents();
+		for (let i: number = 0; i < booked.length; i++) {
+			if (event.start > booked[i].start && event.start < booked[i].end)
+				overlap = true;
+			if (event.end > booked[i].start && event.end < booked[i].end)
+				overlap = true;
+			if (booked[i].start > event.start && booked[i].start < event.end)
+				overlap = true;
+				if (booked[i].end > event.start && booked[i].end < event.end)
+				overlap = true;
+		}
+	}
+
 	onMount(async () => {
 		fetch('/api/v1/list/booking')
 		.then(response => response.json())
@@ -201,6 +215,7 @@ function refreshBooking() {
 			plugins: [TimeGrid, Interaction],
 			options: {
 				view: 'timeGridWeek',
+				scrollTime: new Date().toTimeString(),
 				pointer: true,
 				slotDuration: "00:15:00",
 				nowIndicator: true,
@@ -234,17 +249,23 @@ function refreshBooking() {
 				// 	selected_event = event.event;
 				// 	console.log(selected_event);
 				// },
-				select: async (info: any) => {
+				select: async (event: any) => {
 					if (typeof login === 'undefined') {
 						calendar.unselect();
 						return ;
 					}
-					if (info.end - info.start >= 14400000) {
+					if (event.end - event.start > 14400000) {
 						calendar.unselect();
 						notify_too_long = true;
 						setTimeout(() => {
 						notify_too_long = false;
 					}, 4000);
+						return ;
+					}
+					checkOverlap(event);
+					if (overlap) {
+						overlap = false;
+						calendar.unselect();
 						return ;
 					}
 					document.getElementById("create-booking").showModal();
@@ -254,45 +275,35 @@ function refreshBooking() {
 							login: login,
 							description: ""
 						},
-						start: info.start,
-						end: info.end,
+						start: event.start,
+						end: event.end,
 						style: "border: 2px solid #00C4C7; color: #00C4C7"
 					}
 					selected_event = booking;					
 				},
 				eventDrop: (event: any) => {
-					const booked = calendar.getEvents();
-					for (let i: number = 0; i < booked.length; i++) {
-						if (event.event.start > booked[i].start && event.event.start < booked[i].end)
-							overlap = true;
-						if (event.event.end > booked[i].start && event.event.end < booked[i].end)
-							overlap = true;
-						if (booked[i].start > event.event.start && booked[i].start < event.event.end)
-							overlap = true;
-							if (booked[i].end > event.event.start && booked[i].end < event.event.end)
-							overlap = true;
-					}
+					checkOverlap(event.event);
 					if (overlap || event.event.title.html != `<p class="font-bold">${login}</p>`) {
 						event.revert();
 						overlap = false;
+						return ;
 					}
 					updateBooking(event.event);
 				},
 				eventResize: (event: any) => {
-					const booked = calendar.getEvents();
-					for (let i: number = 0; i < booked.length; i++) {
-						if (event.event.start > booked[i].start && event.event.start < booked[i].end)
-							overlap = true;
-						if (event.event.end > booked[i].start && event.event.end < booked[i].end)
-							overlap = true;
-						if (booked[i].start > event.event.start && booked[i].start < event.event.end)
-							overlap = true;
-							if (booked[i].end > event.event.start && booked[i].end < event.event.end)
-							overlap = true;
-					}
+					checkOverlap(event.event);
 					if (overlap || event.event.title.html != `<p class="font-bold">${login}</p>`) {
 						event.revert();
 						overlap = false;
+						return ;
+					}
+					if (event.event.end - event.event.start > 14400000) {
+						event.revert();
+						notify_too_long = true;
+						setTimeout(() => {
+							notify_too_long = false;
+						}, 4000);
+						return ;
 					}
 					updateBooking(event.event);
 				},
@@ -479,3 +490,44 @@ function refreshBooking() {
 	  <button>close</button>
 	</form>
   </dialog>
+
+<style>
+
+:global(.ec) {
+	--ec-now-indicator-color: theme('colors.error');
+	--ec-today-bg-color: rgba(230, 178, 145, 0);
+}
+
+:global(.ec-title) {
+	@apply text-lg font-bold text-accent;
+}
+
+:global(.ec-button.ec-today) {
+	@apply bg-accent text-primary border-none hover:bg-accent hover:text-primary
+}
+
+:global(.ec-button:disabled),
+:global(.ec-button[disabled]) {
+	@apply opacity-50 cursor-not-allowed;
+}
+
+:global(.ec-button.ec-prev) {
+	@apply bg-[#EBEBEB] text-secondary border-none mr-1
+}
+
+:global(.ec-button.ec-next) {
+	@apply bg-[#EBEBEB] text-secondary border-none ml-1 rounded-md
+}
+
+:global(.ec-days) {
+	@apply text-xs font-bold text-accent;
+}
+
+:global(.ec-sidebar) {
+	@apply text-xs font-bold text-accent;
+}
+
+:global(.ec-body) {
+	@apply h-[75dvh] overflow-y-scroll
+}
+</style>
