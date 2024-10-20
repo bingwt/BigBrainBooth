@@ -528,6 +528,6 @@ function refreshBooking() {
 }
 
 :global(.ec-body) {
-	@apply h-[75dvh] overflow-y-scroll
+	@apply h-[70dvh] p-0 overflow-y-scroll
 }
 </style>
