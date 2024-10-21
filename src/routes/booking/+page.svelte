@@ -14,6 +14,8 @@
 		{#if login}
 		<h1 class="text-4xl">Reservation for <span class="font-bold">{login}</span></h1>
 		{/if}
-		<Schedule />
+		<div class="pt-4 h-[75dvh]">
+			<Schedule />
+		</div>
 	</div>
 </div>
