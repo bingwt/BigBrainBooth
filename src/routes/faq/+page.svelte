@@ -1,25 +1,3 @@
-<script lang="ts">
-	import { page } from "$app/stores";
-
-	/** @type {import('./$types').ActionData} */
-	export let form;
-	
-	$: login = $page?.data?.user?.login;
-
-	let title: string = "";
-	let description: string = ""
-	let priority = "low";
-	let type = "feedback"
-
-	function priorityChange(event: any) {
-		priority = event.currentTarget.value;
-	}
-
-	function typeChange(event: any) {
-		type = event.currentTarget.value;
-	}
- </script>
-
 <svelte:head>
     <title>BBB - Feedback</title> 
 </svelte:head>

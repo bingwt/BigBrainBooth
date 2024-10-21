@@ -9,17 +9,11 @@
     <title>BBB - Booking</title> 
 </svelte:head>
 
-{#if login}
-<div class="flex flex-col gap-4 p-4 w-full">
-	<h1 class="text-4xl">Reservation for <span class="font-bold">{login}</span></h1>
-	<div class="overflow-y-scroll p-4">
+<div class="hero-content">
+	<div class="flex flex-col align-middle gap-4 w-full">
+		{#if login}
+		<h1 class="text-4xl">Reservation for <span class="font-bold">{login}</span></h1>
+		{/if}
 		<Schedule />
 	</div>
 </div>
-{:else}
-<div class="flex flex-col gap-4 p-0 w-full">
-	<div class="overflow-y-scroll p-4 pt-6">
-		<Schedule />
-	</div>
-</div>
-{/if}
