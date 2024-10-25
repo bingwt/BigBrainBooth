@@ -31,8 +31,11 @@ function decryptData(data) {
 	)
 }
 
-export async function GET() {
-	let records = await listReservation();
+export async function GET({ url }) {
+	const query = new URLSearchParams(url.search);
+    const start = new Date (query.get('start')).toISOString();
+    const end = new Date (query.get('end')).toISOString();
+	let records = await listReservation(start, end);
 
 	if (records) {
 		for (let i = 0; i < records.length; i++) {

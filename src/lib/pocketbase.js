@@ -1,3 +1,4 @@
+// @ts-nocheck
 import PocketBase from 'pocketbase';
 
 export const pb = new PocketBase(import.meta.env.VITE_PB_URL);
@@ -23,9 +24,10 @@ export async function checkReservation() {
 	return { reserved: ""}
 }
 
-export async function listReservation() {
+export async function listReservation(start, end) {
 	const records = await pb.collection('42_bbb').getFullList({
 		sort: '-created',
+		filter: `start >= "${start}" && end <= "${end}"`,
 		fields: 'id,login,start,end,allDay,description'
 	});
 	return (records);

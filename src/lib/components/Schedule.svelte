@@ -185,30 +185,6 @@ function refreshBooking() {
 	}
 
 	onMount(async () => {
-		fetch('/api/v1/list/booking')
-		.then(response => response.json())
-		.then(data => {
-			records = data; 
-			for (let i: number = 0; i < records.length; i++) {
-				const booking = {
-					id: records[i].id,
-					title: {
-						html: `<p class="font-bold">${records[i].login}</p>`,
-						login: records[i].login,
-						description: records[i].description,
-						feedback: records[i].feedback
-					},
-					start: new Date(records[i].start),
-					end: new Date(records[i].end),
-					allDay: records[i].allDay,
-					style: "border: 2px solid #00C4C7; color: #00C4C7"
-				}
-				listBookings(booking);
-			}
-		})
-		.catch(error => {
-			console.error('Error fetching data:', error);
-		});
 		calendar = new Calendar({
 		target: document.getElementById('ec'),
 		props: {
@@ -309,6 +285,38 @@ function refreshBooking() {
 				},
 				unselect: () => {
 					overlap = false;
+				},
+				datesSet: (event: any) => {
+					if (calendar) {
+						const events = calendar.getEvents();
+						for (let i = 0; i < events.length; i++) {
+							calendar.removeEventById(events[i].id);
+						}
+					};
+					fetch(`/api/v1/list/booking?start=${event.start}&end=${event.end}`)
+					.then(response => response.json())
+					.then(data => {
+						records = data;
+						for (let i: number = 0; i < records.length; i++) {
+							const booking = {
+								id: records[i].id,
+								title: {
+									html: `<p class="font-bold">${records[i].login}</p>`,
+									login: records[i].login,
+									description: records[i].description,
+									feedback: records[i].feedback
+								},
+								start: new Date(records[i].start),
+								end: new Date(records[i].end),
+								allDay: records[i].allDay,
+								style: "border: 2px solid #00C4C7; color: #00C4C7"
+							}
+							listBookings(booking);
+						}
+					})
+					.catch(error => {
+						console.error('Error fetching data:', error);
+					});
 				},
 				events: []
 			}
