@@ -6,7 +6,7 @@
 <div class="hero-content">
 	<div class="flex flex-col align-middle gap-4">
 		<h1 class="text-4xl font-bold">FAQ</h1>
-		<div class="overflow-y-scroll p-4 flex flex-col gap-8 text-justify h-[75dvh]">
+		<div class="overflow-y-scroll p-4 flex flex-col gap-8 text-left h-[75dvh]">
 			<div>
 				<h2 class="text-2xl font-bold">What's BBB for?</h2>
 				<li>It's a dedicated space for students who would like to step-up and offer help on a specific project</li>
