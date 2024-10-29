@@ -1,23 +1,43 @@
 // @ts-nocheck
 import { redirect, error, json } from '@sveltejs/kit';
-import { checkReservation } from '$lib/pocketbase';
+import { checkReservation, checkBBB, createReservation } from '$lib/pocketbase';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ cookies }) {
 	const reservations = await checkReservation();
+	const check_bbb = await checkBBB();
+	const bbb = {
+		occupied: false,
+		login: ""
+	};
     const session_cookie = cookies.get('session');
-
+	if (check_bbb.length) {
+		bbb.occupied = true;
+		bbb.login = check_bbb[0].login;
+	}
     try {
         const session = JSON.parse(session_cookie);
 		if (session && reservations.reserved === "") {
+			const start = new Date();
+			const end = new Date();
+			end.setMinutes(end.getMinutes() + 30);
+			const record = {
+				start: start.toISOString(),
+				end: end.toISOString(),
+				login: bbb.login,
+				allDay: false,
+			};
+			createReservation(record);
 			return {
 				user: session.user,
-				reservations: { reserved: "" }
+				reservations: { reserved: "" },
+				bbb: bbb
 			};
 		}
         return {
             user: session.user,
-			reservations
+			reservations,
+			bbb: bbb
         };
     } catch (error) {
 

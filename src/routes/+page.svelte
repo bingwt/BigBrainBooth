@@ -7,13 +7,10 @@
 	let reserved: string = "";
 	let start: any;
 	let end: any;
-	let bbb = {
-		occupied: false,
-		login: ""
-	};
 
 	$: login = $page.data?.user?.login;
 	reserved = $page.data?.reservations?.reserved;
+	$: bbb = $page.data?.bbb;
 	if (reserved) {
 		start = $page.data?.reservations?.start;
 		end = $page.data?.reservations?.end;
@@ -22,17 +19,6 @@
 	onMount(async () => {
 		pb.collection('42_bbb').subscribe('*', function async () {
 			window.location.reload();
-		});
-		await fetch('/api/v1/check_availability/bbb')
-		.then(response => response.json())
-		.then(data => {
-			if (data.length) {
-				bbb.occupied = true;
-				bbb.login = data[0].login;
-			}
-		})
-		.catch(error => {
-			console.error('Error fetching data:', error);
 		});
 	});
  </script>
