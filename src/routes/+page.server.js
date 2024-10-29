@@ -18,16 +18,18 @@ export async function load({ cookies }) {
     try {
         const session = JSON.parse(session_cookie);
 		if (session && reservations.reserved === "") {
-			const start = new Date();
-			const end = new Date();
-			end.setMinutes(end.getMinutes() + 30);
-			const record = {
-				start: start.toISOString(),
-				end: end.toISOString(),
-				login: bbb.login,
-				allDay: false,
-			};
-			createReservation(record);
+			if (bbb.occupied) {
+				const start = new Date();
+				const end = new Date();
+				end.setMinutes(end.getMinutes() + 30);
+				const record = {
+					start: start.toISOString(),
+					end: end.toISOString(),
+					login: bbb.login,
+					allDay: false,
+				};
+				createReservation(record);
+			}
 			return {
 				user: session.user,
 				reservations: { reserved: "" },
