@@ -20,6 +20,20 @@
 	let notify_create: boolean = false;
 	let notify_destroy: boolean = false;
 	let notify_too_long: boolean = false;
+	$: coalitions = JSON.parse($page.data?.coalitions);
+	let intra = {
+		event: true,
+		coalition: "",
+		ft_start: false,
+		title: "",
+		description: "",
+		rules: "",
+		support: ""
+	};
+
+	function coalitionChange(event: any) {
+		intra.coalition = event.currentTarget.value;
+	}
 	
 	function listBookings(booking: any) {
 		calendar.addEvent(booking);
@@ -422,8 +436,41 @@ function refreshBooking() {
 			<h3><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h3>
 		</div>
 		<div class="flex flex-col gap-2">
+			<div class="form-control">
+				<label class="label cursor-pointer">
+				  <span class="label-text font-bold">Intra Event</span>
+				  <input type="checkbox" checked={intra.event} class="checkbox" />
+				  {#if intra.event}
+				  <span class="label-text font-bold">Start at 42 minutes</span>
+				  <input type="checkbox" checked={intra.ft_start} class="checkbox" />
+				  {/if}
+				  <!-- <input type="radio" name="type" class="radio checked:bg-secondary" on:change={typeChange} value="feedback" checked={type === "feedback"} /> -->
+				</label>
+			  </div>
+			{#if intra.event}
+			<fieldset id="coalition" class="flex flex-col gap-0">
+				<h2 class="font-bold text-lg">Coalition</h2>
+				{#each coalitions as coalition}
+				<div class="form-control">
+					<label class="label cursor-pointer">
+					<span class="label-text">{coalition}</span>
+					<input type="radio" name="coalition" class="radio checked:bg-secondary" on:change={coalitionChange} value={coalition} checked={intra.coalition === coalition} />
+					</label>
+				</div>
+				{/each}
+			</fieldset>
+			<h2 class="font-bold text-lg">Activity Title/Theme</h2>
+			<input type="text" placeholder="" class="input input-bordered w-full font-bold rounded-md" bind:value={intra.title} />
+			<h2 class="font-bold text-lg">Activity Description</h2>
+			<textarea class="textarea textarea-bordered rounded-md w-full" name="description" placeholder="" bind:value={intra.description}></textarea>
+			<h2 class="font-bold text-lg">Activity Rundown and Rules</h2>
+			<textarea class="textarea textarea-bordered rounded-md w-full" name="description" placeholder="" bind:value={intra.rules}></textarea>
+			<h2 class="font-bold text-lg">Activity Support/Equipment Required</h2>
+			<textarea class="textarea textarea-bordered rounded-md w-full" name="description" placeholder="6 x Badminton Court Booking for Badminton Tournament" bind:value={intra.support}></textarea>
+			{:else}
 			<h2 class="font-bold text-lg">Description</h2>
 			<textarea class="textarea textarea-bordered rounded-md w-full" name="description" placeholder="" bind:value={event_description}></textarea>
+			{/if}
 		</div>
 	  </div>
 	  {#if selected_event?.title?.login === login}

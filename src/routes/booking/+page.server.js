@@ -30,7 +30,8 @@ export function load({ cookies }) {
     try {
         const session = JSON.parse(session_cookie);
         return {
-            user: session.user
+            user: session.user,
+            coalitions: import.meta.env.VITE_COALITIONS
         };
     } catch (error) {
 
