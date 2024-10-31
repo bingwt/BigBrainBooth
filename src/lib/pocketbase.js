@@ -56,6 +56,11 @@ export async function deleteReservation(id) {
 	await pb.collection('42_bbb').delete(id);
 }
 
+// @ts-ignore
+export async function createFeedback(record) {
+	await pb.collection('42_bbb_feedback').create(record);
+}
+
 export async function checkBBB() {
 	const records = await pb.collection('42_core').getFullList({
 		filter: `location = "${import.meta.env.VITE_BBB_LOCATION}"`,
@@ -64,8 +69,17 @@ export async function checkBBB() {
 	return (records);
 }
 
-
-// @ts-ignore
-export async function createFeedback(record) {
-	await pb.collection('42_bbb_feedback').create(record);
+export async function checkUser(login) {
+	const records = await pb.collection('42_bbb_users').getFullList({
+		filter: `login = "${login}"`,
+		fields: 'login, onboarded'
+	});
+	if (records.length == 0) {
+		pb.collection('42_bbb_users').create({login: login});
+		return ({
+			login: login,
+			onboarded: false
+		});
+	}
+	return (records);
 }

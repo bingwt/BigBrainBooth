@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { redirect, error, json } from '@sveltejs/kit';
-import { checkReservation, checkBBB, createReservation } from '$lib/pocketbase';
+import { checkReservation, createReservation, checkBBB, checkUser } from '$lib/pocketbase';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ cookies }) {
@@ -17,6 +17,8 @@ export async function load({ cookies }) {
 	}
     try {
         const session = JSON.parse(session_cookie);
+		const check_user = await checkUser(session.user.login);
+		console.log(check_user)
 		if (session && reservations.reserved === "") {
 			if (bbb.occupied) {
 				const start = new Date();
