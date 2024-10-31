@@ -2,6 +2,7 @@
 	import { page } from "$app/stores";
 	import { onMount } from "svelte";
 	import { pb } from "$lib/pocketbase"
+  import Onboarding from "$lib/components/Onboarding.svelte";
 	/** @type {import('./$types').PageData} */
 	export let data: any;
 	let reserved: string = "";
@@ -22,7 +23,9 @@
       if (typeof document !== 'undefined') {
         const modalElement = document.getElementById("onboarding");
         if (modalElement) {
-          modalElement.showModal();
+			setTimeout(() => {
+				modalElement.showModal();
+			}, 500);
         } else {
           console.error('Onboarding modal element not found');
         }
@@ -43,20 +46,8 @@
 <svelte:head>
     <title>Big Brain Booth</title> 
 </svelte:head>
-
-<dialog id="onboarding" class="modal">
-	<div class="modal-box">
-	  <h3 class="text-lg font-bold">Welcome to the Big Brain Booth</h3>
-	  <p class="py-4">Onboarding</p>
-	  <div class="modal-action justify-between">
-		<form method="dialog">
-		  <button class="btn hover:btn-error hover:text-primary">Skip</button>
-		</form>
-		<button class="btn hover:btn-accent hover:text-primary">Next</button>
-	  </div>
-	</div>
-  </dialog>
 {#if login}
+<Onboarding login={login} />
 <div class="flex flex-col gap-4 justify-between p-0 w-full text-3xl sm:text-4xl">
 <h1>Welcome <span class="font-bold">{login}</span>,</h1>
 {#if reserved === ""}
