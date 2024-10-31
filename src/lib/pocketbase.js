@@ -69,17 +69,14 @@ export async function checkBBB() {
 	return (records);
 }
 
-export async function checkUser(login) {
+export async function checkOnboarding(login) {
 	const records = await pb.collection('42_bbb_users').getFullList({
 		filter: `login = "${login}"`,
-		fields: 'login, onboarded'
+		fields: 'onboarded'
 	});
 	if (records.length == 0) {
 		pb.collection('42_bbb_users').create({login: login});
-		return ({
-			login: login,
-			onboarded: false
-		});
+		return (false);
 	}
-	return (records);
+	return (records[0].onboarded);
 }

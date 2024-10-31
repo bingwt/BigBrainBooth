@@ -9,6 +9,7 @@
 	let end: any;
 
 	$: login = $page.data?.user?.login;
+	$: onboarded = $page.data?.user?.onboarded;
 	reserved = $page.data?.reservations?.reserved;
 	$: bbb = $page.data?.bbb;
 	if (reserved) {
@@ -16,10 +17,26 @@
 		end = $page.data?.reservations?.end;
 	}
 
+	async function checkOnboardStatus() {
+    if (!onboarded) {
+      if (typeof document !== 'undefined') {
+        const modalElement = document.getElementById("onboarding");
+        if (modalElement) {
+          modalElement.showModal();
+        } else {
+          console.error('Onboarding modal element not found');
+        }
+      } else {
+        console.warn('Attempted to access DOM outside of browser environment');
+      }
+    }
+  }
+
 	onMount(async () => {
 		pb.collection('42_bbb').subscribe('*', function async () {
 			window.location.reload();
 		});
+		checkOnboardStatus();
 	});
  </script>
 
@@ -27,6 +44,18 @@
     <title>Big Brain Booth</title> 
 </svelte:head>
 
+<dialog id="onboarding" class="modal">
+	<div class="modal-box">
+	  <h3 class="text-lg font-bold">Welcome to the Big Brain Booth</h3>
+	  <p class="py-4">Onboarding</p>
+	  <div class="modal-action justify-between">
+		<form method="dialog">
+		  <button class="btn hover:btn-error hover:text-primary">Skip</button>
+		</form>
+		<button class="btn hover:btn-accent hover:text-primary">Next</button>
+	  </div>
+	</div>
+  </dialog>
 {#if login}
 <div class="flex flex-col gap-4 justify-between p-0 w-full text-3xl sm:text-4xl">
 <h1>Welcome <span class="font-bold">{login}</span>,</h1>

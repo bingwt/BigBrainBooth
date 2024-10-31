@@ -48,14 +48,6 @@
 
 @font-face {
 	font-family: 'Satoshi';
-	font-style: semibold;
-	font-display: swap;
-	font-weight: 600;
-	src: url('/fonts/Satoshi/Satoshi-SemiBold.woff2')format('woff2');
-}
-
-@font-face {
-	font-family: 'Satoshi';
 	font-style: bold;
 	font-display: swap;
 	font-weight: 700;
