@@ -80,3 +80,11 @@ export async function checkOnboarding(login) {
 	}
 	return (records[0].onboarded);
 }
+
+export async function updateOnboarding(login) {
+	const records = await pb.collection('42_bbb_users').getFullList({
+		filter: `login = "${login}"`,
+		fields: 'id'
+	});
+	await pb.collection('42_bbb_users').update(records[0].id, { onboarded: true });
+}

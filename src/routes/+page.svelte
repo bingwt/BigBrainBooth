@@ -23,9 +23,10 @@
       if (typeof document !== 'undefined') {
         const modalElement = document.getElementById("onboarding");
         if (modalElement) {
-			setTimeout(() => {
-				modalElement.showModal();
-			}, 500);
+			modalElement.showModal();
+			// setTimeout(() => {
+			// 	modalElement.showModal();
+			// }, 500);
         } else {
           console.error('Onboarding modal element not found');
         }

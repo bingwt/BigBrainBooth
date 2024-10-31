@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { redirect, error, json } from '@sveltejs/kit';
-import { checkReservation, createReservation, checkBBB, checkOnboarding } from '$lib/pocketbase';
+import { checkReservation, createReservation, checkBBB, checkOnboarding, updateOnboarding } from '$lib/pocketbase';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ cookies }) {
@@ -53,5 +53,24 @@ export async function load({ cookies }) {
 		};
 	}
 	return { reservations: { reserved: "" } };
-
 }
+
+/** @type {import('./$types').Actions} */
+export const actions = {
+	onboarded: async ({ cookies, request }) => {
+        const session_cookie = cookies.get('session');
+        const session = JSON.parse(session_cookie);
+
+		const data = await request.formData();
+		updateOnboarding(session.user.login);
+		return redirect(303, '/');
+	},
+	reserve: async ({ cookies, request }) => {
+        const session_cookie = cookies.get('session');
+        const session = JSON.parse(session_cookie);
+
+		const data = await request.formData();
+		updateOnboarding(session.user.login);
+		return redirect(303, '/booking');
+	},
+};
