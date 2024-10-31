@@ -21,6 +21,7 @@
 	let notify_destroy: boolean = false;
 	let notify_too_long: boolean = false;
 	$: coalitions = JSON.parse($page.data?.coalitions);
+
 	let intra = {
 		event: true,
 		coalition: "",
@@ -30,6 +31,16 @@
 		rules: "",
 		support: ""
 	};
+
+	function ft_minutes() {
+		if (intra.ft_start == false) {
+			selected_event.start = new Date(selected_event.start.getTime() + 3 * 60000);
+			selected_event.end = new Date(selected_event.end.getTime() + 3 * 60000);
+			return ;
+		}
+		selected_event.start = new Date(selected_event.start.getTime() - 3 * 60000);
+		selected_event.end = new Date(selected_event.end.getTime() - 3 * 60000);
+	}
 
 	function coalitionChange(event: any) {
 		intra.coalition = event.currentTarget.value;
@@ -429,28 +440,36 @@ function refreshBooking() {
 
 <dialog id="create-booking" class="modal">
 	<div class="modal-box rounded-md">
+	  <div class="flex flex-row justify-between">
+	  {#if intra.event && intra.coalition}
+	  <h1 class="text-2xl font-bold">{intra.coalition} Event</h1>
+	  <!-- <div class="h-10 w-10 bg-[{coalitions[intra.coalition]}]">{coalitions[intra.coalition]}</div> -->
+	  {:else}
 	  <h1 class="text-2xl font-bold">Create Event</h1>
+	  {/if}
+	  </div>
 	  <div class="flex flex-col gap-4">
 		<div>
 			<!-- <h2 class="text-xl font-bold">{selected_event?.title?.login}</h2> -->
 			<h3><span class="text-accent font-bold">{selected_event?.start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{selected_event?.end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h3>
 		</div>
 		<div class="flex flex-col gap-2">
-			<div class="form-control">
+			<div class="form-control flex flex-col">
 				<label class="label cursor-pointer">
 				  <span class="label-text font-bold">Intra Event</span>
-				  <input type="checkbox" checked={intra.event} class="checkbox" />
-				  {#if intra.event}
-				  <span class="label-text font-bold">Start at 42 minutes</span>
-				  <input type="checkbox" checked={intra.ft_start} class="checkbox" />
-				  {/if}
-				  <!-- <input type="radio" name="type" class="radio checked:bg-secondary" on:change={typeChange} value="feedback" checked={type === "feedback"} /> -->
+				  <input type="checkbox" bind:checked={intra.event} class="checkbox checkbox-accent" />
 				</label>
+				{#if intra.event && (selected_event?.start.getMinutes() == 42 || selected_event?.start.getMinutes() == 45)}
+				<label class="label cursor-pointer">
+					<span class="label-text font-bold">Start at 42 minutes</span>
+					<input type="checkbox" bind:checked={intra.ft_start} class="checkbox checkbox-accent" on:change={ft_minutes} />
+				  </label>
+				{/if}
 			  </div>
 			{#if intra.event}
 			<fieldset id="coalition" class="flex flex-col gap-0">
 				<h2 class="font-bold text-lg">Coalition</h2>
-				{#each coalitions as coalition}
+				{#each Object.keys(coalitions) as coalition}
 				<div class="form-control">
 					<label class="label cursor-pointer">
 					<span class="label-text">{coalition}</span>
@@ -482,7 +501,19 @@ function refreshBooking() {
 	  {/if}
 	</div>
 	<form method="dialog" class="modal-backdrop">
-	  <button on:click={() => event_description = ""}>close</button>
+	  <button on:click={() =>{
+		event_description = "";
+		intra.ft_start = false;
+		intra = {
+			event: true,
+			coalition: "",
+			ft_start: false,
+			title: "",
+			description: "",
+			rules: "",
+			support: ""
+		};
+		}}>close</button>
 	</form>
   </dialog>
 
