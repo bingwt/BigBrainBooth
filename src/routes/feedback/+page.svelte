@@ -28,6 +28,7 @@
 <div class="hero-content flex flex-col">
 	<h1 class="text-4xl font-bold text-center">Thank you for your feedback!</h1>
 	<a href="/feedback" class="btn btn-secondary font-bold hover:btn-accent hover:text-primary">Submit another feedback</a>
+	<a href="/" class="btn btn-secondary font-bold hover:btn-accent hover:text-primary">Home</a>
 </div>
 {:else}
 <form method="POST" action="?/submit" class="hero-content">
