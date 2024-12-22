@@ -34,6 +34,9 @@
     }
 
     function upVote() {
+        if (!login) {
+            return;
+        }
         if (upVoted) {
             post.votes.up.splice(post.votes.up.indexOf(login), 1);
         } else if (downVoted) {
@@ -48,6 +51,9 @@
     }
 
     function downVote() {
+        if (!login) {
+            return;
+        }
         if (downVoted) {
             post.votes.down.splice(post.votes.down.indexOf(login), 1);
         } else if (upVoted) {
