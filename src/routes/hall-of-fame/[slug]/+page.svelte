@@ -1,6 +1,5 @@
 <script>
     import { onMount } from 'svelte';
-    import UserPost from '$lib/components/UserPost.svelte';
     import { page } from '$app/stores';
 
     console.log($page.params.slug);

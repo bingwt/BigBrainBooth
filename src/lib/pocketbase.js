@@ -82,7 +82,7 @@ export async function listHallOfFame(start, end) {
 export async function getHallOfFame() {
 	let records = await pb.collection('42_hall_of_fame').getFullList({
 		sort: '-created',
-		fields: 'id,author,title,description,tags,media,votes,saves,published,comments'
+		fields: 'id,author,title,description,tags,media,votes,saves,published,comments,created'
 	});
 	for (let i = 0; i < records.length; i++) {
 		for (let j = 0; j < records[i].media.length; j++) {
@@ -98,7 +98,7 @@ export async function createHallOfFamePost(record) {
 
 export async function getHallOfFamePost(id) {
 	const record = await pb.collection('42_hall_of_fame').getOne(id, {
-		fields: 'id,author,title,description,tags,media,votes,saves,published,comments'
+		fields: 'id,author,title,description,tags,media,votes,saves,published,comments,created'
 	});
 	return (record);
 }
