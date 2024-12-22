@@ -10,7 +10,6 @@
             body: JSON.stringify({ id: $page.params.slug }),
         });
         post = await response.json();
-        console.log(post);
     });
 
     function isVideo(media) {

@@ -2,7 +2,6 @@
     export let post;
     import { page } from "$app/stores";
 
-    console.log(post);
     let login = $page.data?.user?.login;
     let votes = post.votes.up.length - post.votes.down.length;
     let saved = post.saves.includes(login) ? true : false;
