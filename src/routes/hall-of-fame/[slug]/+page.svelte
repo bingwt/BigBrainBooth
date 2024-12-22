@@ -24,9 +24,9 @@
         const now = new Date();
         const date = new Date(dateStr);
         const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
-        const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+        const diffMinutes = Math.floor(diffTime / (1000 * 60));
         if (diffDays > 0) {
             if (diffDays === 1) {
                 return "a day ago";
@@ -44,6 +44,35 @@
             return `${diffMinutes} minutes ago`;
         }
         return "just now";
+    }
+
+    let comment = "";
+
+    async function submitComment() {
+        const newComment = {
+            login: login,
+            description: comment,
+            date: new Date().toISOString(),
+        };
+
+        const updatedComments = [...post.comments, newComment];
+
+        await fetch(`/api/v1/update/hall-of-fame`, {
+            method: "POST",
+            body: JSON.stringify({ id: $page.params.slug, comments: updatedComments }),
+        });
+
+        comment = "";
+
+        const response = await fetch(`/api/v1/list/hall-of-fame`, {
+            method: "POST",
+            body: JSON.stringify({ id: $page.params.slug }),
+        });
+        post = await response.json();
+    }
+
+    function sortComments(comments) {
+        return comments.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
 </script>
 
@@ -113,11 +142,11 @@
                 </p>
                 {#if login}
                     <div
-                        class="flex flex-col gap-2 h-[75dvh] overflow-y-scroll fade-top pt-4"
+                        class="flex flex-col gap-2 overflow-y-scroll fade-top pt-4"
                     >
-                        {#each post.comments as comment}
+                        {#each sortComments(post.comments) as comment}
                             <div
-                                class="flex flex-col gap-2 border p-4 rounded-xl"
+                                class="flex flex-col gap-2 border p-4 rounded-xl hover:border-accent"
                             >
                                 <div class="flex flex-row gap-2">
                                     <a
@@ -130,6 +159,14 @@
                                 <p>{comment.description}</p>
                             </div>
                         {/each}
+                        <div class="flex flex-col gap-2">
+                            <textarea
+                                class="textarea textarea-primary border-secondary focus:border-accent"
+                                placeholder="Comment"
+                                bind:value={comment}
+                            ></textarea>
+                            <button class="btn btn-primary font-bold border-secondary hover:text-primary hover:btn-accent" on:click={submitComment}>Submit</button>
+                        </div>
                     </div>
                 {:else}
                     <p class="font-normal">
