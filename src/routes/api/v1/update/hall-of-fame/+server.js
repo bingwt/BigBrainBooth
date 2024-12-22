@@ -31,10 +31,10 @@ export async function POST({ request, cookies }) {
 	if (!origin || !allowedOrigins.includes(origin)) {
 			throw error(403, 'Origin not allowed');
 	}
-	
-	const { id, comments } = await request.json();
-	if (comments) {
-		updateHallOfFamePost(decryptData(id), { comments: comments });
+
+	const { id, record } = await request.json();
+	if (record) {
+		updateHallOfFamePost(decryptData(id), record);
 		return (json('success', { status: 201 }))
 	}
 	error(404, 'Not found');

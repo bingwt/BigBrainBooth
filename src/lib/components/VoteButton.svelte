@@ -1,6 +1,7 @@
 <script>
     export let post;
     import { page } from "$app/stores";
+    import { updateHallOfFamePost } from "$lib/pocketbase";
 
     let login = $page.data?.user?.login;
     let voted = (login) => {
@@ -16,10 +17,53 @@
     };
 
     let votes = post.votes.up.length - post.votes.down.length;
-</script>
+
+    function upVote() {
+        if (post.votes.up.includes(login)) {
+            post.votes.up.splice(post.votes.up.indexOf(login), 1);
+        } else {
+            post.votes.up.push(login);
+        }
+        votes = post.votes.up.length - post.votes.down.length;
+        submitVote();
+    }
+
+    function downVote() {
+        if (post.votes.down.includes(login)) {
+            post.votes.down.splice(post.votes.down.indexOf(login), 1);
+        } else {
+            post.votes.down.push(login);
+        }
+        votes = post.votes.up.length - post.votes.down.length;
+        submitVote();
+    }
+
+    async function submitVote() {
+        const updatedVotes = {
+            up: post.votes.up,
+            down: post.votes.down,
+        };
+
+        const updatedRecord = {
+            votes: updatedVotes,
+        };
+
+        await fetch(`/api/v1/update/hall-of-fame`, {
+            method: "POST",
+            body: JSON.stringify({ id: post.id, record: updatedRecord }),
+        });
+
+        const response = await fetch(`/api/v1/list/hall-of-fame`, {
+            method: "POST",
+            body: JSON.stringify({ id: post.id }),
+        });
+        post = await response.json();
+    }
+    </script>
+
 
 <div class="flex flex-col gap-0 items-center">
-    <button class="btn btn-ghost text-secondary">
+    <button class="btn btn-ghost text-secondary" on:click={upVote}>
         {#if voted(login) === "up"}
             <svg
                 class="text-orange-500 hover:text-error"
@@ -59,7 +103,7 @@
             ></path></svg
         >
     {/if}
-    <button class="btn btn-ghost text-secondary">
+    <button class="btn btn-ghost text-secondary" on:click={downVote}>
         {#if voted(login) === "down"}
             <svg
                 class="text-orange-500 hover:text-error"

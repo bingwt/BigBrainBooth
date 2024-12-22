@@ -58,9 +58,13 @@
 
         const updatedComments = [...post.comments, newComment];
 
+        const updatedRecord = {
+            comments: updatedComments,
+        };
+
         await fetch(`/api/v1/update/hall-of-fame`, {
             method: "POST",
-            body: JSON.stringify({ id: $page.params.slug, comments: updatedComments }),
+            body: JSON.stringify({ id: $page.params.slug, record: updatedRecord }),
         });
 
         comment = "";

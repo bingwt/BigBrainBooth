@@ -12,18 +12,6 @@
         return videoExtensions.includes(extension);
     }
 
-    let voted = (login) => {
-        if (login === undefined) {
-            return "";
-        }
-        if (post.votes.up.includes(login)) {
-            return "up";
-        } else if (post.votes.down.includes(login)) {
-            return "down";
-        }
-        return "";
-    };
-
     function formatDate(dateStr) {
         const now = new Date();
         const date = new Date(dateStr);
