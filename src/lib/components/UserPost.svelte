@@ -5,6 +5,7 @@
 
     let login = $page.data?.user?.login;
     let saved = post.saves.includes(login) ? true : false;
+    let buttonText = "share";
 
     function isVideo(media) {
         const videoExtensions = ["mp4"];
@@ -16,9 +17,9 @@
         const now = new Date();
         const date = new Date(dateStr);
         const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
-        const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+        const diffMinutes = Math.floor(diffTime / (1000 * 60));
         if (diffDays > 0) {
             if (diffDays === 1) {
                 return "a day ago";
@@ -65,6 +66,16 @@
         post = await response.json();
 
         saved = post.saves.includes(login) ? true : false;
+    }
+
+    function copyToClipboard() {
+        const url = `${window.location.origin}/hall-of-fame/${post.id}`;
+        navigator.clipboard.writeText(url).then(() => {
+            buttonText = "copied to clipboard!";
+            setTimeout(() => {
+                buttonText = "share";
+            }, 2000);
+        })
     }
 </script>
 
@@ -113,11 +124,12 @@
                     {post.comments.length === 1 ? "comment" : "comments"}
                 </a>
                 <div class="divider divider-horizontal divider-secondary"></div>
-                <div
+                <button
                     class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
+                    on:click={copyToClipboard}
                 >
-                    share
-                </div>
+                    {buttonText}
+                </button>
                 <div class="divider divider-horizontal divider-secondary"></div>
                 <button
                     class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300"

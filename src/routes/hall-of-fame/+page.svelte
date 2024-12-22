@@ -25,8 +25,9 @@
             {/each}
             <div class="toast">
                 <a
-                href="/hall-of-fame/create"
-                class="btn btn-ghost btn-circle btn-lg text-accent hover:scale-[1.2] transition-all duration-300">
+                    href="/hall-of-fame/create"
+                    class="btn btn-ghost btn-circle btn-lg text-accent hover:scale-[1.2] transition-all duration-300"
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
