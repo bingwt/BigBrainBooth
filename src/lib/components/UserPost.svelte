@@ -157,7 +157,7 @@
         <!-- <p class="text-lg">{post.description}</p> -->
         <div class="flex w-full h-4 items-center">
             <a
-                href={`/hall-of-fame/${post.title}`}
+                href={`/hall-of-fame/${post.id}`}
                 class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
             >
                 {post.comments.length} comments
