@@ -76,14 +76,14 @@
 			</div>
 			<input type="hidden" name="tags" value={JSON.stringify(tags)} />
 		</fieldset>
-		<fieldset id="media" class="flex flex-col gap-0">
-			<h2 class="font-bold text-lg">Media</h2>
+		<fieldset id="media" class="flex flex-col gap-0 opacity-50" disabled>
+			<h2 class="font-bold text-lg">Media <span class="text-error">(disabled)</span></h2>
 			<label for="file" class="join join-horizontal w-full">
 				<btn
 					class="btn btn-{$dark_mode
 						? 'secondary'
 						: 'primary border-secondary'} join-item
-						hover:bg-accent hover:text-primary"
+						hover:bg-accent hover:text-primary" disabled
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

@@ -29,12 +29,12 @@ export const actions = {
                 login: session.user.login,
                 image: session.user.image,
             },
+            media: [],
             tags: data.get('tags'),
             votes: {up: [], down: []},
             saves: [],
             published: true,
             comments: [],
-            // type: data.get('type'),
         }
 
         createHallOfFamePost(record);
