@@ -1,42 +1,11 @@
 <script>
     export let post;
     import { page } from "$app/stores";
-    import { updateHallOfFamePost } from "$lib/pocketbase";
 
     let login = $page.data?.user?.login;
-    let voted = (login) => {
-        if (login === undefined) {
-            return "";
-        }
-        if (post.votes.up.includes(login)) {
-            return "up";
-        } else if (post.votes.down.includes(login)) {
-            return "down";
-        }
-        return "";
-    };
 
-    let votes = post.votes.up.length - post.votes.down.length;
-
-    function upVote() {
-        if (post.votes.up.includes(login)) {
-            post.votes.up.splice(post.votes.up.indexOf(login), 1);
-        } else {
-            post.votes.up.push(login);
-        }
-        votes = post.votes.up.length - post.votes.down.length;
-        submitVote();
-    }
-
-    function downVote() {
-        if (post.votes.down.includes(login)) {
-            post.votes.down.splice(post.votes.down.indexOf(login), 1);
-        } else {
-            post.votes.down.push(login);
-        }
-        votes = post.votes.up.length - post.votes.down.length;
-        submitVote();
-    }
+    let upVoted = post.votes.up.includes(login) ? true : false;
+    let downVoted = post.votes.down.includes(login) ? true : false;
 
     async function submitVote() {
         const updatedVotes = {
@@ -58,13 +27,47 @@
             body: JSON.stringify({ id: post.id }),
         });
         post = await response.json();
+        upVoted = post.votes.up.includes(login) ? true : false;
+        downVoted = post.votes.down.includes(login) ? true : false;
+        votes = post.votes.up.length - post.votes.down.length;
     }
+    
+    function upVote() {
+        if (upVoted) {
+            post.votes.up.splice(post.votes.up.indexOf(login), 1);
+        } else if (downVoted) {
+            post.votes.down.splice(post.votes.down.indexOf(login), 1);
+            post.votes.up.push(login);
+        } else {
+            post.votes.up.push(login);
+        }
+        upVoted = post.votes.up.includes(login) ? true : false;
+        downVoted = post.votes.down.includes(login) ? true : false;
+        submitVote();
+    };
+
+    function downVote() {
+        if (downVoted) {
+            post.votes.down.splice(post.votes.down.indexOf(login), 1);
+        } else if (upVoted) {
+            post.votes.up.splice(post.votes.up.indexOf(login), 1);
+            post.votes.down.push(login);
+        } else {
+            post.votes.down.push(login);
+        }
+        upVoted = post.votes.up.includes(login) ? true : false;
+        downVoted = post.votes.down.includes(login) ? true : false;
+        submitVote();
+    }
+
+    let votes = post.votes.up.length - post.votes.down.length;
+
     </script>
 
 
 <div class="flex flex-col gap-0 items-center">
     <button class="btn btn-ghost text-secondary hover:scale-[1.2] transition-all duration-300" on:click={upVote}>
-        {#if voted(login) === "up"}
+        {#if upVoted}
             <svg
                 class="text-orange-500 hover:text-error"
                 xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +107,7 @@
         >
     {/if}
     <button class="btn btn-ghost text-secondary hover:scale-[1.2] transition-all duration-300" on:click={downVote}>
-        {#if voted(login) === "down"}
+        {#if downVoted}
             <svg
                 class="text-orange-500 hover:text-error"
                 xmlns="http://www.w3.org/2000/svg"
