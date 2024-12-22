@@ -100,6 +100,9 @@ export async function getHallOfFamePost(id) {
 	const record = await pb.collection('42_hall_of_fame').getOne(id, {
 		fields: 'id,author,title,description,tags,media,votes,saves,published,comments,created'
 	});
+	for (let i = 0; i < record.media.length; i++) {
+		record.media[i] = `${import.meta.env.VITE_PB_URL}/api/files/42_hall_of_fame/${record.id}/${record.media[i]}`
+	}
 	return (record);
 }
 

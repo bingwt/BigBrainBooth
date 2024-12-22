@@ -125,7 +125,7 @@
         </button>
     </div>
     {#if post.media.length}
-        <a href={`/hall-of-fame/${post.title}`}>
+        <a href={`/hall-of-fame/${post.id}`}>
             {#if isVideo(post.media[0])}
                 <video muted class="w-24 rounded-md">
                     <source src={`${post.media[0]}`} type="video/mp4" />
@@ -142,7 +142,7 @@
     {/if}
     <div class="flex flex-col gap-4">
         <a
-            href={`/hall-of-fame/${post.title}`}
+            href={`/hall-of-fame/${post.id}`}
             class="text-secondary text-2xl font-bold hover:text-accent hover:underline no-underline"
             >{post.title}</a
         >

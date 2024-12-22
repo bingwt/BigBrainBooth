@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { error, json } from '@sveltejs/kit';
-import { getHallOfFame } from '$lib/pocketbase';
+import { getHallOfFame, getHallOfFamePost } from '$lib/pocketbase';
 import crypto from 'crypto';
 
 const secret_key = crypto
@@ -55,7 +55,7 @@ export async function POST({ request, cookies }) {
 	}
 
 	const { id } = await request.json();
-	const record = await getHallOfFame(decryptData(id));
+	const record = await getHallOfFamePost(decryptData(id));
 
 	if (record) {
 		record.id = encryptData(record.id);
