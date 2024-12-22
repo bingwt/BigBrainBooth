@@ -70,19 +70,25 @@
             <div
                 class="overflow-y-scroll p-4 flex flex-col gap-8 text-left h-[75dvh] fade-top pt-14"
             >
-                <div class="flex flex-row gap-4 text-lg border p-4 rounded-xl">
-                    {post.description}
+                <div class="flex flex-col gap-4 text-lg border p-4 rounded-xl">
+                    {@html post.description}
                 </div>
-                {#each post.media as media}
-                    {#if isVideo(media)}
-                        <video autoplay controls muted class="rounded-xl">
-                            <source src={`${media}`} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                    {:else}
-                        <img src={`${media}`} alt={post.title} />
-                    {/if}
-                {/each}
+                {#if post.media.length}
+                <div class="carousel w-full rounded-xl gap-4 bg-black border-2 border-secondary">
+                    {#each post.media as media}
+                        <div class="carousel-item w-full">
+                            {#if isVideo(media)}
+                                <video controls muted class="w-full object-contain">
+                                    <source src={`${media}`} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            {:else}
+                                <img src={`${media}`} alt={post.title} class="w-full object-contain" />
+                            {/if}
+                        </div>
+                    {/each}
+                </div>
+                {/if}
                 <p>{post.comments.length} comments</p>
                 <p>{post.saves.length} saves</p>
             </div>

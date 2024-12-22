@@ -84,11 +84,11 @@ export async function getHallOfFame() {
 		sort: '-created',
 		fields: 'id,author,title,description,tags,media,votes,saves,published,comments,created'
 	});
-	for (let i = 0; i < records.length; i++) {
-		for (let j = 0; j < records[i].media.length; j++) {
-			records[i].media[j] = `${import.meta.env.VITE_PB_URL}/api/files/42_hall_of_fame/${records[i].id}/${records[i].media[j]}`
-		}
-	}
+	// for (let i = 0; i < records.length; i++) {
+	// 	for (let j = 0; j < records[i].media.length; j++) {
+	// 		records[i].media[j] = `${import.meta.env.VITE_PB_URL}/api/files/42_hall_of_fame/${records[i].id}/${records[i].media[j]}`
+	// 	}
+	// }
 	return (records);
 }
 
@@ -100,9 +100,9 @@ export async function getHallOfFamePost(id) {
 	const record = await pb.collection('42_hall_of_fame').getOne(id, {
 		fields: 'id,author,title,description,tags,media,votes,saves,published,comments,created'
 	});
-	for (let i = 0; i < record.media.length; i++) {
-		record.media[i] = `${import.meta.env.VITE_PB_URL}/api/files/42_hall_of_fame/${record.id}/${record.media[i]}`
-	}
+	// for (let i = 0; i < record.media.length; i++) {
+	// 	record.media[i] = `${import.meta.env.VITE_PB_URL}/api/files/42_hall_of_fame/${record.id}/${record.media[i]}`
+	// }
 	return (record);
 }
 

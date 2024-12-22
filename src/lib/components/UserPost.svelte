@@ -52,6 +52,7 @@
     }
 </script>
 
+{#if post}
 <div
     class="flex flex-row gap-4 border border-secondary-50 hover:border-accent rounded-lg p-4 w-full items-center shadow-md"
 >
@@ -200,3 +201,4 @@
         </div>
     </div>
 </div>
+{/if}
