@@ -42,7 +42,7 @@
             return `${diffMinutes} minutes ago`;
         }
         return "just now";
-    }   
+    }
 </script>
 
 <svelte:head>
@@ -55,7 +55,9 @@
             <h1 class="text-4xl font-bold">{post.title}</h1>
             <div class="flex flex-row gap-2">
                 {#each post.tags as tag}
-                    <p class="badge badge-accent text-primary font-bold">{tag}</p>
+                    <p class="badge badge-accent text-primary font-bold">
+                        {tag}
+                    </p>
                 {/each}
             </div>
             <p>
@@ -73,20 +75,35 @@
                     {@html post.description}
                 </div>
                 {#if post.media.length}
-                <div class="carousel w-full rounded-xl gap-4 bg-black border-2 border-secondary">
-                    {#each post.media as media}
-                        <div class="carousel-item w-full">
-                            {#if isVideo(media)}
-                                <video controls muted class="w-full object-contain">
-                                    <source src={`${media}`} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                            {:else}
-                                <img src={`${media}`} alt={post.title} class="w-full object-contain" />
-                            {/if}
-                        </div>
-                    {/each}
-                </div>
+                    <div
+                        class="carousel w-full rounded-xl gap-4 bg-black border-2 border-secondary min-h-[300px]"
+                    >
+                        {#each post.media as media}
+                            <div
+                                class="carousel-item w-full flex justify-center items-center h-full"
+                            >
+                                {#if isVideo(media)}
+                                    <video
+                                        controls
+                                        muted
+                                        class="w-full max-h-full max-w-full object-contain"
+                                    >
+                                        <source
+                                            src={`${media}`}
+                                            type="video/mp4"
+                                        />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {:else}
+                                    <img
+                                        src={`${media}`}
+                                        alt={post.title}
+                                        class="w-full max-h-full max-w-full object-contain"
+                                    />
+                                {/if}
+                            </div>
+                        {/each}
+                    </div>
                 {/if}
                 <p>{post.comments.length} comments</p>
                 <p>{post.saves.length} saves</p>
