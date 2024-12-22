@@ -41,7 +41,7 @@
 
 {#if post}
 <div
-    class="flex flex-row gap-4 border border-secondary-50 hover:border-accent rounded-lg p-4 w-full items-center shadow-md"
+    class="flex flex-row gap-4 border border-secondary-50 hover:border-accent rounded-lg p-4 w-full items-center hover:shadow-md hover:scale-[1.01] transition-all duration-300"
 >
     <VoteButton post={post} />
     {#if post.media.length}
@@ -90,7 +90,7 @@
             </div>
             <div class="divider divider-horizontal divider-secondary"></div>
             <div
-                class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0"
+                class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300"
             >
                 {#if saved}
                     <svg

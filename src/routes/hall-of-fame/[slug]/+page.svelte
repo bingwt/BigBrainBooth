@@ -64,7 +64,10 @@
 
         await fetch(`/api/v1/update/hall-of-fame`, {
             method: "POST",
-            body: JSON.stringify({ id: $page.params.slug, record: updatedRecord }),
+            body: JSON.stringify({
+                id: $page.params.slug,
+                record: updatedRecord,
+            }),
         });
 
         comment = "";
@@ -87,7 +90,7 @@
 
 {#if post}
     <div class="hero-content">
-        <div class="flex flex-col align-middle gap-4 w-full">
+        <div class="flex flex-col align-middle gap-4 w-screen">
             <h1 class="text-4xl font-bold">{post.title}</h1>
             <div class="flex flex-row gap-2">
                 {#each post.tags as tag}
@@ -141,47 +144,52 @@
                         {/each}
                     </div>
                 {/if}
-                <p>
-                    {post.comments.length}
-                    {post.comments.length === 1 ? "comment" : "comments"}
-                </p>
-                {#if login}
-                    <div
-                        class="flex flex-col gap-2 overflow-y-scroll fade-top pt-4"
-                    >
-                        {#each sortComments(post.comments) as comment}
-                            <div
-                                class="flex flex-col gap-2 border p-4 rounded-xl hover:border-accent"
-                            >
-                                <div class="flex flex-row gap-2">
-                                    <a
-                                        href={`https://profile.intra.42.fr/users/${comment.login}`}
-                                        class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
-                                        >{comment.login}</a
-                                    >
-                                    <p>{formatDate(comment.date)}</p>
-                                </div>
-                                <p>{comment.description}</p>
-                            </div>
-                        {/each}
-                        <div class="flex flex-col gap-2">
-                            <textarea
-                                class="textarea textarea-primary border-secondary focus:border-accent"
-                                placeholder="Comment"
-                                bind:value={comment}
-                            ></textarea>
-                            <button class="btn btn-primary font-bold border-secondary hover:text-primary hover:btn-accent" on:click={submitComment}>Submit</button>
-                        </div>
-                    </div>
-                {:else}
-                    <p class="font-normal">
-                        <a
-                            href="/signin"
-                            class="hover:text-accent hover:underline no-underline font-bold text-accent"
-                            >Login</a
-                        > to view comments
+                <div class="flex flex-col gap-2">
+                    <p>
+                        {post.comments.length}
+                        {post.comments.length === 1 ? "comment" : "comments"}
                     </p>
-                {/if}
+                    {#if login}
+                        <div
+                            class="flex flex-col gap-2 overflow-y-scroll fade-top pt-4"
+                        >
+                            {#each sortComments(post.comments) as comment}
+                                <div
+                                    class="flex flex-col gap-2 border p-4 rounded-xl hover:border-accent hover:shadow-md transition-all duration-300"
+                                >
+                                    <div class="flex flex-row gap-2">
+                                        <a
+                                            href={`https://profile.intra.42.fr/users/${comment.login}`}
+                                            class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
+                                            >{comment.login}</a
+                                        >
+                                        <p>{formatDate(comment.date)}</p>
+                                    </div>
+                                    <p>{comment.description}</p>
+                                </div>
+                            {/each}
+                            <div class="flex flex-col gap-2">
+                                <textarea
+                                    class="textarea textarea-primary border-secondary focus:border-accent"
+                                    placeholder="Comment"
+                                    bind:value={comment}
+                                ></textarea>
+                                <button
+                                    class="btn btn-primary font-bold border-secondary hover:text-primary hover:btn-accent"
+                                    on:click={submitComment}>Submit</button
+                                >
+                            </div>
+                        </div>
+                    {:else}
+                        <p class="font-normal">
+                            <a
+                                href="/signin"
+                                class="hover:text-accent hover:underline no-underline font-bold text-accent"
+                                >Login</a
+                            > to view comments
+                        </p>
+                    {/if}
+                </div>
                 <!-- <p>{post.saves.length} saves</p> -->
             </div>
         </div>

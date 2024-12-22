@@ -63,7 +63,7 @@
 
 
 <div class="flex flex-col gap-0 items-center">
-    <button class="btn btn-ghost text-secondary" on:click={upVote}>
+    <button class="btn btn-ghost text-secondary hover:scale-[1.2] transition-all duration-300" on:click={upVote}>
         {#if voted(login) === "up"}
             <svg
                 class="text-orange-500 hover:text-error"
@@ -103,7 +103,7 @@
             ></path></svg
         >
     {/if}
-    <button class="btn btn-ghost text-secondary" on:click={downVote}>
+    <button class="btn btn-ghost text-secondary hover:scale-[1.2] transition-all duration-300" on:click={downVote}>
         {#if voted(login) === "down"}
             <svg
                 class="text-orange-500 hover:text-error"
