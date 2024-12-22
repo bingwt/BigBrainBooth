@@ -4,6 +4,8 @@
 
     let post;
 
+    let login = $page.data?.user?.login;
+
     onMount(async () => {
         const response = await fetch(`/api/v1/list/hall-of-fame`, {
             method: "POST",
@@ -105,8 +107,40 @@
                         {/each}
                     </div>
                 {/if}
-                <p>{post.comments.length} comments</p>
-                <p>{post.saves.length} saves</p>
+                <p>
+                    {post.comments.length}
+                    {post.comments.length === 1 ? "comment" : "comments"}
+                </p>
+                {#if login}
+                    <div
+                        class="flex flex-col gap-2 h-[75dvh] overflow-y-scroll fade-top pt-4"
+                    >
+                        {#each post.comments as comment}
+                            <div
+                                class="flex flex-col gap-2 border p-4 rounded-xl"
+                            >
+                                <div class="flex flex-row gap-2">
+                                    <a
+                                        href={`https://profile.intra.42.fr/users/${comment.login}`}
+                                        class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
+                                        >{comment.login}</a
+                                    >
+                                    <p>{formatDate(comment.date)}</p>
+                                </div>
+                                <p>{comment.description}</p>
+                            </div>
+                        {/each}
+                    </div>
+                {:else}
+                    <p class="font-normal">
+                        <a
+                            href="/signin"
+                            class="hover:text-accent hover:underline no-underline font-bold text-accent"
+                            >Login</a
+                        > to view comments
+                    </p>
+                {/if}
+                <!-- <p>{post.saves.length} saves</p> -->
             </div>
         </div>
     </div>

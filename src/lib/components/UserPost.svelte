@@ -160,7 +160,7 @@
                 href={`/hall-of-fame/${post.id}`}
                 class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
             >
-                {post.comments.length} comments
+                {post.comments.length} {post.comments.length === 1 ? "comment" : "comments"}
             </a>
             <div class="divider divider-horizontal divider-secondary"></div>
             <div
