@@ -69,3 +69,47 @@ export async function checkBBB() {
 export async function createFeedback(record) {
 	await pb.collection('42_bbb_feedback').create(record);
 }
+
+export async function listHallOfFame(start, end) {
+	const records = await pb.collection('42_hall_of_fame').getFullList({
+		sort: '-created',
+		filter: `start >= "${start}" && end <= "${end}"`,
+		fields: 'id,author,title,description'
+	});
+	return (records);
+}
+
+export async function getHallOfFame() {
+	let records = await pb.collection('42_hall_of_fame').getFullList({
+		sort: '-created',
+		fields: 'id,author,title,description,tags,media,votes,saves,published,comments,created'
+	});
+	// for (let i = 0; i < records.length; i++) {
+	// 	for (let j = 0; j < records[i].media.length; j++) {
+	// 		records[i].media[j] = `${import.meta.env.VITE_PB_URL}/api/files/42_hall_of_fame/${records[i].id}/${records[i].media[j]}`
+	// 	}
+	// }
+	return (records);
+}
+
+export async function createHallOfFamePost(record) {
+	await pb.collection('42_hall_of_fame').create(record);
+}
+
+export async function getHallOfFamePost(id) {
+	const record = await pb.collection('42_hall_of_fame').getOne(id, {
+		fields: 'id,author,title,description,tags,media,votes,saves,published,comments,created'
+	});
+	// for (let i = 0; i < record.media.length; i++) {
+	// 	record.media[i] = `${import.meta.env.VITE_PB_URL}/api/files/42_hall_of_fame/${record.id}/${record.media[i]}`
+	// }
+	return (record);
+}
+
+export async function updateHallOfFamePost(id, record) {
+	await pb.collection('42_hall_of_fame').update(id, record);
+}
+
+export async function deleteHallOfFamePost(id) {
+	await pb.collection('42_hall_of_fame').delete(id);
+}

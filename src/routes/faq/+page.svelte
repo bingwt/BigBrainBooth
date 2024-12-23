@@ -1,5 +1,5 @@
 <svelte:head>
-    <title>BBB - Feedback</title> 
+    <title>BBB - FAQ</title> 
 </svelte:head>
 
 
