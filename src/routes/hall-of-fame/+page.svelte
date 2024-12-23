@@ -21,6 +21,10 @@
         <div
             class="overflow-y-scroll p-4 flex flex-col gap-4 text-left h-[75dvh] w-screen fade-top pt-10 max-w-screen-lg"
         >
+            <div class="font-bold">
+                {posts.length}
+                {posts.length == 1 ? "post" : "posts"}
+            </div>
             {#each posts as post}
                 <UserPost {post} />
             {/each}
