@@ -30,6 +30,7 @@
 			  class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
 			  <li><a href="https://profile.intra.42.fr/users/{login}" target="_blank" class="hover:text-accent">View my profile</a></li>
 			  <li><a href="/booking" class="hover:text-accent">Reserve</a></li>
+			  <li><a href="/hall-of-fame" class="hover:text-accent">Hall of Fame</a></li>
 			  <li><a href="/faq" class="hover:text-accent">FAQ</a></li>
 			  <li><a href="/feedback" class="hover:text-accent">Feedback</a></li>
 			  <li><form method="POST" action="/logout" use:enhance>

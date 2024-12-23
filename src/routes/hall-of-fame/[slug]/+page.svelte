@@ -122,7 +122,7 @@
             setTimeout(() => {
                 buttonText = "share";
             }, 2000);
-        })
+        });
     }
 </script>
 
@@ -133,72 +133,76 @@
 {#if post}
     <div class="hero-content">
         <div class="flex flex-col align-middle gap-4 w-screen mt-8">
-            <h1 class="text-4xl font-bold">{post.title}</h1>
-            <div class="flex flex-row gap-2">
-                {#each post.tags as tag}
-                    <p class="badge badge-accent text-primary font-bold">
-                        {tag}
-                    </p>
-                {/each}
-            </div>
-            <p>
-                submitted {formatDate(post.created)} by
-                <a
-                    href={`https://profile.intra.42.fr/users/${post.author.login}`}
-                    class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
-                    >{post.author.login}</a
-                >
-            </p>
-            <div class="flex w-full h-4 items-center">
-                <!-- <a
+            <div
+                class="flex flex-col gap-4 border p-4 rounded-xl mt-4 shadow-xl"
+            >
+                <h1 class="text-4xl font-bold">{post.title}</h1>
+                <div class="flex flex-row gap-2">
+                    {#each post.tags as tag}
+                        <p class="badge badge-accent text-primary font-bold">
+                            {tag}
+                        </p>
+                    {/each}
+                </div>
+                <p>
+                    submitted {formatDate(post.created)} by
+                    <a
+                        href={`https://profile.intra.42.fr/users/${post.author.login}`}
+                        class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
+                        >{post.author.login}</a
+                    >
+                </p>
+                <div class="flex w-full h-4 items-center">
+                    <!-- <a
                     href={`/hall-of-fame/${post.id}`}
                     class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
                 >
                     {post.comments.length}
                     {post.comments.length === 1 ? "comment" : "comments"}
                 </a> -->
-                <VoteButton {post} type="vertical" />
-                <div class="divider divider-horizontal divider-secondary"></div>
-                <button
-                    class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
-                    on:click={copyToClipboard}
-                >
-                    {buttonText}
-                </button>
-                <div class="divider divider-horizontal divider-secondary"></div>
-                <button
-                    class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300"
-                    on:click={submitSaved}
-                >
-                    {#if saved}
-                        <svg
-                            class="text-error"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            viewBox="0 0 256 256"
-                            ><path
-                                d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                            ></path></svg
-                        >
-                    {:else}
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            viewBox="0 0 256 256"
-                            ><path
-                                d="M178,36c-20.09,0-37.92,7.93-50,21.56C115.92,43.93,98.09,36,78,36a66.08,66.08,0,0,0-66,66c0,72.34,105.81,130.14,110.31,132.57a12,12,0,0,0,11.38,0C138.19,232.14,244,174.34,244,102A66.08,66.08,0,0,0,178,36Zm-5.49,142.36A328.69,328.69,0,0,1,128,210.16a328.69,328.69,0,0,1-44.51-31.8C61.82,159.77,36,131.42,36,102A42,42,0,0,1,78,60c17.8,0,32.7,9.4,38.89,24.54a12,12,0,0,0,22.22,0C145.3,69.4,160.2,60,178,60a42,42,0,0,1,42,42C220,131.42,194.18,159.77,172.51,178.36Z"
-                            ></path></svg
-                        >
-                    {/if}
-                </button>
-            </div>
-            <div
-                class="overflow-y-scroll p-4 flex flex-col gap-8 text-left h-[75dvh] fade-top pt-14"
-            >
+                    <VoteButton {post} type="vertical" />
+                    <div
+                        class="divider divider-horizontal divider-secondary"
+                    ></div>
+                    <button
+                        class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
+                        on:click={copyToClipboard}
+                    >
+                        {buttonText}
+                    </button>
+                    <div
+                        class="divider divider-horizontal divider-secondary"
+                    ></div>
+                    <button
+                        class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300"
+                        on:click={submitSaved}
+                    >
+                        {#if saved}
+                            <svg
+                                class="text-error"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                fill="currentColor"
+                                viewBox="0 0 256 256"
+                                ><path
+                                    d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
+                                ></path></svg
+                            >
+                        {:else}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                fill="currentColor"
+                                viewBox="0 0 256 256"
+                                ><path
+                                    d="M178,36c-20.09,0-37.92,7.93-50,21.56C115.92,43.93,98.09,36,78,36a66.08,66.08,0,0,0-66,66c0,72.34,105.81,130.14,110.31,132.57a12,12,0,0,0,11.38,0C138.19,232.14,244,174.34,244,102A66.08,66.08,0,0,0,178,36Zm-5.49,142.36A328.69,328.69,0,0,1,128,210.16a328.69,328.69,0,0,1-44.51-31.8C61.82,159.77,36,131.42,36,102A42,42,0,0,1,78,60c17.8,0,32.7,9.4,38.89,24.54a12,12,0,0,0,22.22,0C145.3,69.4,160.2,60,178,60a42,42,0,0,1,42,42C220,131.42,194.18,159.77,172.51,178.36Z"
+                                ></path></svg
+                            >
+                        {/if}
+                    </button>
+                </div>
                 <div class="flex flex-col gap-4 text-lg border p-4 rounded-xl">
                     {@html post.description}
                 </div>
@@ -208,13 +212,14 @@
                     >
                         {#each post.media as media}
                             <div
-                                class="carousel-item w-full flex justify-center items-center h-full"
+                                class="carousel-item w-full flex justify-center items-center"
                             >
                                 {#if isVideo(media)}
                                     <video
                                         controls
                                         muted
-                                        class="w-full max-h-full max-w-full object-contain"
+                                        class="w-full h-auto max-h-96 object-contain"
+                                        style="aspect-ratio: 16/9;"
                                     >
                                         <source
                                             src={`${media}`}
@@ -226,22 +231,25 @@
                                     <img
                                         src={`${media}`}
                                         alt={post.title}
-                                        class="w-full max-h-full max-w-full object-contain"
+                                        class="w-full h-auto max-h-96 object-contain"
+                                        style="aspect-ratio: 16/9;"
                                     />
                                 {/if}
                             </div>
                         {/each}
                     </div>
                 {/if}
-                <div class="flex flex-col gap-2">
+            </div>
+            <div
+                class="overflow-y-scroll p-4 flex flex-col gap-8 text-left max-h-[75dvh] fade-top pt-14"
+            >
+                <div class="flex flex-col gap-2 border p-4 rounded-xl">
                     <p>
                         {post.comments.length}
                         {post.comments.length === 1 ? "comment" : "comments"}
                     </p>
                     {#if login}
-                        <div
-                            class="flex flex-col gap-2 overflow-y-scroll fade-top pt-4"
-                        >
+                        <div class="flex flex-col gap-2 overflow-y-scroll">
                             {#each sortComments(post.comments) as comment}
                                 <div
                                     class="flex flex-col gap-2 border p-4 rounded-xl hover:border-accent hover:shadow-md transition-all duration-300"
@@ -257,17 +265,6 @@
                                     <p>{comment.description}</p>
                                 </div>
                             {/each}
-                            <div class="flex flex-col gap-2">
-                                <textarea
-                                    class="textarea textarea-primary border-secondary focus:border-accent"
-                                    placeholder="Comment"
-                                    bind:value={comment}
-                                ></textarea>
-                                <button
-                                    class="btn btn-primary font-bold border-secondary hover:text-primary hover:btn-accent"
-                                    on:click={submitComment}>Submit</button
-                                >
-                            </div>
                         </div>
                     {:else}
                         <p class="font-normal">
@@ -281,6 +278,32 @@
                 </div>
                 <!-- <p>{post.saves.length} saves</p> -->
             </div>
+            {#if login}
+            <div class="flex flex-col gap-4 p-4 rounded-lg shadow-md border">
+                <textarea
+                    class="textarea textarea-bordered textarea-primary w-full h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
+                    placeholder="Comment..."
+                    bind:value={comment}
+                ></textarea>
+                <button
+                    class="btn btn-accent w-full font-bold text-primary hover:bg-accent-focus transition-all duration-200"
+                    on:click={submitComment}
+                >
+                    Submit
+                </button>
+            </div>
+                <!-- <div class="flex flex-col gap-2">
+                    <textarea
+                        class="textarea textarea-primary border-secondary focus:border-accent"
+                        placeholder="Comment"
+                        bind:value={comment}
+                    ></textarea>
+                    <button
+                        class="btn btn-primary font-bold border-secondary hover:text-primary hover:btn-accent"
+                        on:click={submitComment}>Submit</button
+                    >
+                </div> -->
+            {/if}
         </div>
     </div>
 {/if}
