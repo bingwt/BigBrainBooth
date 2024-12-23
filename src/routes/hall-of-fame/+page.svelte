@@ -18,7 +18,7 @@
     <div class="flex flex-col align-middle gap-4">
         <h1 class="text-4xl font-bold p-4">Hall of Fame</h1>
         <div
-            class="overflow-y-scroll p-4 flex flex-col gap-4 text-left h-[75dvh] w-screen fade-top pt-10"
+            class="overflow-y-scroll p-4 flex flex-col gap-4 text-left h-[75dvh] w-screen fade-top pt-10 max-w-screen-lg"
         >
             {#each posts as post}
                 <UserPost {post} />
