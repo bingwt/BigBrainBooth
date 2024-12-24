@@ -25,8 +25,10 @@
                 {posts.length}
                 {posts.length == 1 ? "post" : "posts"}
             </div>
-            {#each posts as post}
+            {#each posts as post, i}
+            <div class="motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-opacity-in-[0%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate motion-delay-[{i * 1000}ms]">
                 <UserPost {post} />
+            </div>
             {/each}
         </div>
         <div class="toast">

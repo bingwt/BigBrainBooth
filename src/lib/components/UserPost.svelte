@@ -1,6 +1,7 @@
 <script>
     export let post;
     import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
     import VoteButton from "./VoteButton.svelte";
 
     let login = $page.data?.user?.login;
@@ -75,17 +76,18 @@
             setTimeout(() => {
                 buttonText = "share";
             }, 2000);
-        })
+        });
     }
 </script>
 
 {#if post}
     <div
-        class="flex flex-row gap-4 border border-secondary-50 hover:border-accent rounded-lg p-4 w-full items-center hover:shadow-md hover:scale-[1.01] transition-all duration-300"
+        class="flex flex-row gap-4 border border-secondary-50 hover:border-accent rounded-lg p-4 w-full items-center hover:shadow-md hover:scale-[1.01] transition-all duration-300 hover:cursor-pointer"
+        on:click={() => goto(`/hall-of-fame/${post.id}`)}
     >
         <VoteButton {post} />
         {#if post.media.length}
-            <a href={`/hall-of-fame/${post.id}`}>
+            <a href={`/hall-of-fame/${post.id}`} on:click|stopPropagation>
                 {#if isVideo(post.media[0])}
                     <video muted class="w-24 rounded-md">
                         <source src={`${post.media[0]}`} type="video/mp4" />
@@ -100,7 +102,7 @@
                 {/if}
             </a>
         {/if}
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4" on:click|stopPropagation>
             <a
                 href={`/hall-of-fame/${post.id}`}
                 class="text-secondary text-2xl font-bold hover:text-accent hover:underline no-underline"
@@ -117,7 +119,7 @@
             <!-- <p class="text-lg">{post.description}</p> -->
             <div class="flex w-full h-4 items-center">
                 <a
-                    href={`/hall-of-fame/${post.id}`}
+                    href={`/hall-of-fame/${post.id}#comments`}
                     class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
                 >
                     {post.comments.length}
@@ -132,7 +134,7 @@
                 </button>
                 <div class="divider divider-horizontal divider-secondary"></div>
                 <button
-                    class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300"
+                    class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300 hover:motion-preset-pulse"
                     on:click={submitSaved}
                 >
                     {#if saved}

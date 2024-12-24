@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+  content: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
     extend: {
       fontFamily: {
-        'satoshi': ['Satoshi', 'sans']
+        satoshi: ["Satoshi", "sans"],
       },
     },
   },
@@ -12,30 +12,27 @@ export default {
     themes: [
       {
         light: {
-          "primary": "#FFFFFF",
-          "secondary": "#202027",
-          "accent": "#00BABC",
-          "accent2": "#FF9447",
-          "neutral": "#67676C",
-          "success": "#5DB85B",
-          "warning": "#E6B291",
-          "error": "#D7636F",
+          primary: "#FFFFFF",
+          secondary: "#202027",
+          accent: "#00BABC",
+          accent2: "#FF9447",
+          neutral: "#67676C",
+          success: "#5DB85B",
+          warning: "#E6B291",
+          error: "#D7636F",
         },
         dark: {
-          "primary": "#202027",
-          "secondary": "#FFFFFF",
-          "accent": "#00BABC",
-          "accent2": "#FF9447",
-          "neutral": "#67676C",
-          "success": "#5DB85B",
-          "warning": "#E6B291",
-          "error": "#D7636F",
+          primary: "#202027",
+          secondary: "#FFFFFF",
+          accent: "#00BABC",
+          accent2: "#FF9447",
+          neutral: "#67676C",
+          success: "#5DB85B",
+          warning: "#E6B291",
+          error: "#D7636F",
         },
       },
     ],
   },
-  plugins: [
-    require('daisyui'),
-  ],
-}
-
+  plugins: [require("daisyui"), require("tailwindcss-motion")],
+};
