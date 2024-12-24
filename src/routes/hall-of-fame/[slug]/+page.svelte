@@ -127,6 +127,37 @@
             }, 2000);
         });
     }
+
+    let editMode = false;
+    let postCopy;
+
+    function toggleEditMode() {
+        editMode = !editMode;
+        if (editMode) {
+            postCopy = JSON.parse(JSON.stringify(post));
+        } else {
+            cancelEdit();
+        }
+    }
+
+    async function updatePost() {
+        await fetch(`/api/v1/update/hall-of-fame`, {
+            method: "POST",
+            body: JSON.stringify({
+                id: post.id,
+                record: {
+                    title: post.title,
+                    description: post.description,
+                },
+            }),
+        });
+        editMode = false;
+    }
+
+    function cancelEdit() {
+        post = JSON.parse(JSON.stringify(postCopy));
+        editMode = false;
+    }
 </script>
 
 <svelte:head>
@@ -140,29 +171,72 @@
                 class="flex flex-col gap-4 border p-4 rounded-xl mt-4 shadow-xl motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-opacity-in-[0%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate"
             >
                 <div class="flex flex-row gap-2 justify-between">
-                    <h1 class="text-4xl font-bold">{post.title}</h1>
-                    <button
-                        class="btn btn-primary"
-                        on:click={() => goto("/hall-of-fame")}
-                        ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            fill="currentColor"
-                            viewBox="0 0 256 256"
-                            ><path
-                                d="M236,112a68.07,68.07,0,0,1-68,68H61l27.52,27.51a12,12,0,0,1-17,17l-48-48a12,12,0,0,1,0-17l48-48a12,12,0,1,1,17,17L61,156H168a44,44,0,0,0,0-88H80a12,12,0,0,1,0-24h88A68.07,68.07,0,0,1,236,112Z"
-                            ></path></svg
-                        ></button
-                    >
+                    {#if editMode}
+                        <input
+                            type="text"
+                            bind:value={post.title}
+                            class="input input-primary text-3xl font-bold border-secondary focus:border-accent"
+                        />
+                    {:else}
+                        <h1 class="text-4xl font-bold">{post.title}</h1>
+                    {/if}
+                    <div class="flex flex-col gap-2 w-28 p-4">
+                        <div
+                            class="flex flex-col gap-2 absolute top-0 right-0 p-4"
+                        >
+                            <button
+                                class="btn btn-primary"
+                                on:click={() => goto("/hall-of-fame")}
+                                ><svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    fill="currentColor"
+                                    viewBox="0 0 256 256"
+                                    ><path
+                                        d="M236,112a68.07,68.07,0,0,1-68,68H61l27.52,27.51a12,12,0,0,1-17,17l-48-48a12,12,0,0,1,0-17l48-48a12,12,0,1,1,17,17L61,156H168a44,44,0,0,0,0-88H80a12,12,0,0,1,0-24h88A68.07,68.07,0,0,1,236,112Z"
+                                    ></path></svg
+                                ></button
+                            >
+                            {#if post.author === login && !editMode}
+                                <button
+                                    class="btn btn-primary"
+                                    on:click={toggleEditMode}
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        fill="currentColor"
+                                        viewBox="0 0 256 256"
+                                        ><path
+                                            d="M232.49,55.51l-32-32a12,12,0,0,0-17,0l-96,96A12,12,0,0,0,84,128v32a12,12,0,0,0,12,12h32a12,12,0,0,0,8.49-3.51l96-96A12,12,0,0,0,232.49,55.51ZM192,49l15,15L196,75,181,60Zm-69,99H108V133l56-56,15,15Zm105-7.43V208a20,20,0,0,1-20,20H48a20,20,0,0,1-20-20V48A20,20,0,0,1,48,28h67.43a12,12,0,0,1,0,24H52V204H204V140.57a12,12,0,0,1,24,0Z"
+                                        ></path></svg
+                                    ></button
+                                >
+                            {/if}
+                        </div>
+                    </div>
                 </div>
                 <div class="flex flex-row gap-2">
-                    {#each post.tags as tag}
-                        <p class="badge badge-accent text-primary font-bold">
-                            {tag}
-                        </p>
-                    {/each}
+                    {#if editMode}
+                        {#each post.tags as tag}
+                            <p
+                                class="badge badge-neutral text-primary font-bold"
+                            >
+                                {tag}
+                            </p>
+                        {/each}
+                    {:else}
+                        {#each post.tags as tag}
+                            <p
+                                class="badge badge-accent text-primary font-bold"
+                            >
+                                {tag}
+                            </p>
+                        {/each}
+                    {/if}
                 </div>
+                {#if !editMode}
                 <p>
                     submitted {formatDate(post.created)} by
                     <a
@@ -222,9 +296,37 @@
                         {/if}
                     </button>
                 </div>
-                <div class="flex flex-col gap-4 text-lg border p-4 rounded-xl">
-                    {@html post.description}
-                </div>
+                {/if}
+                {#if editMode}
+                    <div class="flex flex-col gap-4 motion-preset-expand">
+                        <div class="flex flex-col gap-4">
+                            <textarea
+                                bind:value={post.description}
+                                class="textarea textarea-primary border-secondary focus:border-accent resize-none text-md"
+                            ></textarea>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <button
+                                class="btn btn-accent hover:btn-error-accent text-primary"
+                                on:click={updatePost}
+                            >
+                                Save
+                            </button>
+                            <button
+                                class="btn btn-error hover:btn-error-focus text-primary"
+                                on:click={cancelEdit}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                {:else}
+                    <div
+                        class="flex flex-col gap-4 text-lg border p-4 rounded-xl motion-preset-fade"
+                    >
+                        {@html post.description}
+                    </div>
+                {/if}
                 {#if post.media.length}
                     <div
                         class="carousel w-full rounded-xl gap-4 bg-black border-2 border-secondary min-h-[300px]"
