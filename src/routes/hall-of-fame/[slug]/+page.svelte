@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
     import VoteButton from "$lib/components/VoteButton.svelte";
 
     let post;
@@ -138,7 +139,23 @@
             <div
                 class="flex flex-col gap-4 border p-4 rounded-xl mt-4 shadow-xl motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-opacity-in-[0%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate"
             >
-                <h1 class="text-4xl font-bold">{post.title}</h1>
+                <div class="flex flex-row gap-2 justify-between">
+                    <h1 class="text-4xl font-bold">{post.title}</h1>
+                    <button
+                        class="btn btn-primary"
+                        on:click={() => goto("/hall-of-fame")}
+                        ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                            ><path
+                                d="M236,112a68.07,68.07,0,0,1-68,68H61l27.52,27.51a12,12,0,0,1-17,17l-48-48a12,12,0,0,1,0-17l48-48a12,12,0,1,1,17,17L61,156H168a44,44,0,0,0,0-88H80a12,12,0,0,1,0-24h88A68.07,68.07,0,0,1,236,112Z"
+                            ></path></svg
+                        ></button
+                    >
+                </div>
                 <div class="flex flex-row gap-2">
                     {#each post.tags as tag}
                         <p class="badge badge-accent text-primary font-bold">
