@@ -25,8 +25,9 @@ export const actions = {
         const record = {
             title: data.get('title'),
             description: data.get('description'),
-            author: {
-                login: session.user.login,
+            author: session.user.login,
+            author_meta: {
+                name: session.user.name,
                 image: session.user.image,
             },
             media: [],

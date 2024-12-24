@@ -92,6 +92,15 @@ export async function getHallOfFame() {
 	return (records);
 }
 
+export async function searchHallOfFame(search) {
+	const records = await pb.collection('42_hall_of_fame').getFullList({
+		filter: `author ~ "${search}" || author_meta.name ~ "${search}" || tags ~ "${search}" || title ~ "${search}" || description ~ "${search}" || comments ~ "${search}"`,
+		sort: '-created',
+		fields: 'id,author,title,description,tags,media,votes,saves,published,comments,created'
+	});
+	return (records);
+}
+
 export async function createHallOfFamePost(record) {
 	await pb.collection('42_hall_of_fame').create(record);
 }
