@@ -131,7 +131,7 @@ export async function getProfile(login) {
 	const records = await pb.collection('42_bbb_profiles').getFullList({
 		filter: `login ~ "${login}"`,
 		sort: '-created',
-		fields: 'id,login,votes,saves,comments,created'
+		fields: 'id,login,votes,saved,comments,created'
 	});
 	return (records);
 }
