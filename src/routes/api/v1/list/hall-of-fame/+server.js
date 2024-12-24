@@ -36,11 +36,14 @@ export async function GET({ url }) {
     const start = new Date (query.get('start')).toISOString();
     const end = new Date (query.get('end')).toISOString();
 	const search = query.get('search');
+    const id = query.get('id');
 	let records = [];
 
 
 	if (search) {
 		records = await searchHallOfFame(search);
+	} else if (id) {
+		records = await getHallOfFamePost(decryptData(id));
 	} else {
 		records = await getHallOfFame(start, end);
 	}

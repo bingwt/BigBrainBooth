@@ -4,7 +4,7 @@
     import { page } from "$app/stores";
 
     let login = $page.data?.user?.login;
-    
+
     $: upVoted = post.votes.up.includes(login) ? true : false;
     $: downVoted = post.votes.down.includes(login) ? true : false;
     $: votes = post.votes.up.length - post.votes.down.length;
@@ -13,8 +13,8 @@
         votes: {
             up: [],
             down: [],
-        }
-    }
+        },
+    };
 
     async function submitVote() {
         const updatedVotes = {
@@ -62,7 +62,7 @@
         downVoted = post.votes.down.includes(login) ? true : false;
         const record = {
             votes: profileVotes,
-        }
+        };
         await fetch(`/api/v1/update/profile`, {
             method: "POST",
             body: JSON.stringify({ id: profile[0].id, record: record }),
@@ -94,7 +94,7 @@
         downVoted = post.votes.down.includes(login) ? true : false;
         const record = {
             votes: profileVotes,
-        }
+        };
         await fetch(`/api/v1/update/profile`, {
             method: "POST",
             body: JSON.stringify({ id: profile[0].id, record: record }),
@@ -180,7 +180,10 @@
         </button>
     </div>
 {:else}
-    <div class="flex flex-row gap-2 items-center scale-[0.8]" on:click|stopPropagation>
+    <div
+        class="flex flex-row gap-2 items-center scale-[0.8]"
+        on:click|stopPropagation
+    >
         <button
             class="btn btn-ghost text-secondary hover:scale-[1.2] transition-all duration-300 p-0"
             on:click={upVote}
