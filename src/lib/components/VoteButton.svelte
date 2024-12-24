@@ -9,6 +9,13 @@
     $: downVoted = post.votes.down.includes(login) ? true : false;
     $: votes = post.votes.up.length - post.votes.down.length;
 
+    let newRecord = {
+        votes: {
+            up: [],
+            down: [],
+        }
+    }
+
     async function submitVote() {
         const updatedVotes = {
             up: post.votes.up,
@@ -31,37 +38,67 @@
         post = await response.json();
     }
 
-    function upVote() {
+    async function upVote() {
         if (!login) {
             return;
         }
+
+        const response = await fetch(`/api/v1/list/profile?login=${login}`);
+        const profile = await response.json();
+        let profileVotes = profile[0].votes;
         if (upVoted) {
             post.votes.up.splice(post.votes.up.indexOf(login), 1);
+            profileVotes.up.splice(profileVotes.up.indexOf(post.id), 1);
         } else if (downVoted) {
             post.votes.down.splice(post.votes.down.indexOf(login), 1);
+            profileVotes.down.splice(profileVotes.down.indexOf(post.id), 1);
             post.votes.up.push(login);
+            profileVotes.up.push(post.id);
         } else {
             post.votes.up.push(login);
+            profileVotes.up.push(post.id);
         }
         upVoted = post.votes.up.includes(login) ? true : false;
         downVoted = post.votes.down.includes(login) ? true : false;
+        const record = {
+            votes: profileVotes,
+        }
+        await fetch(`/api/v1/update/profile`, {
+            method: "POST",
+            body: JSON.stringify({ id: profile[0].id, record: record }),
+        });
         submitVote();
     }
 
-    function downVote() {
+    async function downVote() {
         if (!login) {
             return;
         }
+
+        const response = await fetch(`/api/v1/list/profile?login=${login}`);
+        const profile = await response.json();
+        let profileVotes = profile[0].votes;
         if (downVoted) {
             post.votes.down.splice(post.votes.down.indexOf(login), 1);
+            profileVotes.down.splice(profileVotes.down.indexOf(post.id), 1);
         } else if (upVoted) {
             post.votes.up.splice(post.votes.up.indexOf(login), 1);
+            profileVotes.up.splice(profileVotes.up.indexOf(post.id), 1);
             post.votes.down.push(login);
+            profileVotes.down.push(post.id);
         } else {
             post.votes.down.push(login);
+            profileVotes.down.push(post.id);
         }
         upVoted = post.votes.up.includes(login) ? true : false;
         downVoted = post.votes.down.includes(login) ? true : false;
+        const record = {
+            votes: profileVotes,
+        }
+        await fetch(`/api/v1/update/profile`, {
+            method: "POST",
+            body: JSON.stringify({ id: profile[0].id, record: record }),
+        });
         submitVote();
     }
 </script>
