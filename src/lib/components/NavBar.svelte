@@ -1,11 +1,36 @@
 <script>
 	import { page } from "$app/stores";
 	import { enhance } from '$app/forms';
-
+	import { dark_mode } from "$lib/stores";
+	import { onMount } from "svelte";
 	$: login = $page.data?.user?.login;
 	$: image = $page.data?.user?.image;
 	$: route = $page.route?.id;
 
+	const switchTheme = () => {
+        $dark_mode = !$dark_mode;
+
+        if ($dark_mode) {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
+    };
+
+    const handleThemeToggle = () => {
+        if (!document.startViewTransition) {
+            switchTheme();
+            return;
+        }
+
+        document.startViewTransition(() => switchTheme());
+    };
+
+    onMount(() => {
+        if ($dark_mode) {
+            document.documentElement.classList.add("dark");
+        }
+    });
 </script>
 
 <div class="navbar bg-primary fixed z-10">
@@ -29,6 +54,7 @@
 			  tabindex="0"
 			  class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
 			  <li><a href="https://profile.intra.42.fr/users/{login}" target="_blank" class="hover:text-accent">View my profile</a></li>
+			  <li><button class="" on:click={handleThemeToggle}>{$dark_mode ? "Light" : "Dark"}</button></li>
 			  <li><a href="/booking" class="hover:text-accent">Reserve</a></li>
 			  <li><a href="/hall-of-fame" class="hover:text-accent">Hall of Fame</a></li>
 			  <li><a href="/faq" class="hover:text-accent">FAQ</a></li>
