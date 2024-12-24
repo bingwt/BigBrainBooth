@@ -131,10 +131,10 @@
 </svelte:head>
 
 {#if post}
-    <div class="hero-content">
+    <div class="hero-content motion-preset-fade">
         <div class="flex flex-col align-middle gap-4 w-screen mt-8">
             <div
-                class="flex flex-col gap-4 border p-4 rounded-xl mt-4 shadow-xl"
+                class="flex flex-col gap-4 border p-4 rounded-xl mt-4 shadow-xl motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-opacity-in-[0%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate"
             >
                 <h1 class="text-4xl font-bold">{post.title}</h1>
                 <div class="flex flex-row gap-2">
@@ -160,7 +160,7 @@
                     {post.comments.length}
                     {post.comments.length === 1 ? "comment" : "comments"}
                 </a> -->
-                    <VoteButton {post} type="vertical" />
+                    <VoteButton {post} type="horizontal" />
                     <div
                         class="divider divider-horizontal divider-secondary"
                     ></div>
@@ -279,19 +279,21 @@
                 <!-- <p>{post.saves.length} saves</p> -->
             </div>
             {#if login}
-            <div class="flex flex-col gap-4 p-4 rounded-lg shadow-md border">
-                <textarea
-                    class="textarea textarea-bordered textarea-primary w-full h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
-                    placeholder="Comment..."
-                    bind:value={comment}
-                ></textarea>
-                <button
-                    class="btn btn-accent w-full font-bold text-primary hover:bg-accent-focus transition-all duration-200"
-                    on:click={submitComment}
+                <div
+                    class="flex flex-col gap-4 p-4 rounded-lg shadow-md border"
                 >
-                    Submit
-                </button>
-            </div>
+                    <textarea
+                        class="textarea textarea-bordered textarea-primary w-full h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
+                        placeholder="Comment..."
+                        bind:value={comment}
+                    ></textarea>
+                    <button
+                        class="btn btn-accent w-full font-bold text-primary hover:bg-accent-focus transition-all duration-200"
+                        on:click={submitComment}
+                    >
+                        Submit
+                    </button>
+                </div>
                 <!-- <div class="flex flex-col gap-2">
                     <textarea
                         class="textarea textarea-primary border-secondary focus:border-accent"

@@ -1,6 +1,6 @@
 <script>
     export let post;
-    export let type = "horizontal";
+    export let type = "vertical";
     import { page } from "$app/stores";
 
     let login = $page.data?.user?.login;
@@ -70,8 +70,8 @@
     let votes = post.votes.up.length - post.votes.down.length;
 </script>
 
-{#if type === "horizontal"}
-    <div class="flex flex-col gap-0 items-center">
+{#if type === "vertical"}
+    <div class="flex flex-col gap-0 items-center" on:click|stopPropagation>
         <button
             class="btn btn-ghost text-secondary hover:scale-[1.2] transition-all duration-300"
             on:click={upVote}
@@ -147,7 +147,7 @@
         </button>
     </div>
 {:else}
-    <div class="flex flex-row gap-2 items-center scale-[0.8]">
+    <div class="flex flex-row gap-2 items-center scale-[0.8]" on:click|stopPropagation>
         <button
             class="btn btn-ghost text-secondary hover:scale-[1.2] transition-all duration-300 p-0"
             on:click={upVote}
