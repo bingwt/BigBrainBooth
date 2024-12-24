@@ -111,9 +111,9 @@
             <p>
                 submitted {formatDate(post.created)} by
                 <a
-                    href={`https://profile.intra.42.fr/users/${post.author.login}`}
+                    href={`https://profile.intra.42.fr/users/${post.author}`}
                     class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
-                    >{post.author.login}</a
+                    >{post.author}</a
                 >
             </p>
             <!-- <p class="text-lg">{post.description}</p> -->

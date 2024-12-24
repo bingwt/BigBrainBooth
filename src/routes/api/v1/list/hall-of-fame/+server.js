@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { error, json } from '@sveltejs/kit';
-import { getHallOfFame, getHallOfFamePost } from '$lib/pocketbase';
+import { getHallOfFame, getHallOfFamePost, searchHallOfFame } from '$lib/pocketbase';
 import crypto from 'crypto';
 
 const secret_key = crypto
@@ -35,7 +35,15 @@ export async function GET({ url }) {
 	const query = new URLSearchParams(url.search);
     const start = new Date (query.get('start')).toISOString();
     const end = new Date (query.get('end')).toISOString();
-	let records = await getHallOfFame(start, end);
+	const search = query.get('search');
+	let records = [];
+
+
+	if (search) {
+		records = await searchHallOfFame(search);
+	} else {
+		records = await getHallOfFame(start, end);
+	}
 
 	if (records) {
 		for (let i = 0; i < records.length; i++) {

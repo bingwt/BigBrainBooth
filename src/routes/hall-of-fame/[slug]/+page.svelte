@@ -5,7 +5,8 @@
 
     let post;
 
-    let login = $page.data?.user?.login;
+    const login = $page.data?.user?.login;
+    const name = $page.data?.user?.name;
     let saved = false;
     let buttonText = "share";
 
@@ -55,6 +56,7 @@
     async function submitComment() {
         const newComment = {
             login: login,
+            name: name,
             description: comment,
             date: new Date().toISOString(),
         };
@@ -147,9 +149,9 @@
                 <p>
                     submitted {formatDate(post.created)} by
                     <a
-                        href={`https://profile.intra.42.fr/users/${post.author.login}`}
+                        href={`https://profile.intra.42.fr/users/${post.author}`}
                         class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
-                        >{post.author.login}</a
+                        >{post.author}</a
                     >
                 </p>
                 <div class="flex w-full h-4 items-center">

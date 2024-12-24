@@ -4,9 +4,10 @@
     import { page } from "$app/stores";
 
     let login = $page.data?.user?.login;
-
-    let upVoted = post.votes.up.includes(login) ? true : false;
-    let downVoted = post.votes.down.includes(login) ? true : false;
+    
+    $: upVoted = post.votes.up.includes(login) ? true : false;
+    $: downVoted = post.votes.down.includes(login) ? true : false;
+    $: votes = post.votes.up.length - post.votes.down.length;
 
     async function submitVote() {
         const updatedVotes = {
@@ -28,9 +29,6 @@
             body: JSON.stringify({ id: post.id }),
         });
         post = await response.json();
-        upVoted = post.votes.up.includes(login) ? true : false;
-        downVoted = post.votes.down.includes(login) ? true : false;
-        votes = post.votes.up.length - post.votes.down.length;
     }
 
     function upVote() {
@@ -66,8 +64,6 @@
         downVoted = post.votes.down.includes(login) ? true : false;
         submitVote();
     }
-
-    let votes = post.votes.up.length - post.votes.down.length;
 </script>
 
 {#if type === "vertical"}
