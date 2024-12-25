@@ -75,11 +75,11 @@ export const actions = {
             description: record.description,
             author: record.author,
             author_meta: record.author_meta,
-            media: record.media,
+            // media: record.media,
             tags: record.tags,
             comments: record.comments
         }
-        let msResponse = await ms.index("hall-of-fame").addDocuments([msRecord]);
+        let msResponse = await ms.index(import.meta.env.VITE_MEILISEARCH_INDEX).addDocuments([msRecord]);
         return { success: true };
     },
 };

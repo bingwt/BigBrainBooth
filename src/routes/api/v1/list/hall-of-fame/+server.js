@@ -45,7 +45,7 @@ export async function GET({ url, locals }) {
 		searchFilter = ["author", "author_meta", "title", "media", "tags"];
 	}
 	if (search) {
-		const results = await ms.index("hall-of-fame").search(search, {
+		const results = await ms.index(import.meta.env.VITE_MEILISEARCH_INDEX).search(search, {
 			attributesToSearchOn: searchFilter
 		});
 		records = results.hits;
