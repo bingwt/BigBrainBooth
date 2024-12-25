@@ -102,7 +102,8 @@ export async function searchHallOfFame(search) {
 }
 
 export async function createHallOfFamePost(record) {
-	await pb.collection('42_hall_of_fame').create(record);
+	const response = await pb.collection('42_hall_of_fame').create(record);
+	return (response);
 }
 
 export async function getHallOfFamePost(id) {

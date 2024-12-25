@@ -32,7 +32,7 @@ function decryptData(data) {
 	)
 }
 
-export async function GET({ url }) {
+export async function GET({ url, locals }) {
 	const query = new URLSearchParams(url.search);
 	const start = new Date(query.get('start')).toISOString();
 	const end = new Date(query.get('end')).toISOString();
@@ -40,15 +40,18 @@ export async function GET({ url }) {
 	const id = query.get('id');
 	let records = [];
 
-
+	let searchFilter = ["*"];
+	if (!locals.user) {
+		searchFilter = ["author", "author_meta", "title", "media", "tags"];
+	}
 	if (search) {
 		const results = await ms.index("hall-of-fame").search(search, {
-			attributesToSearchOn: ["author", "author_meta", "title", "comments", "media", "tags"],
+			attributesToSearchOn: searchFilter
 		});
 		records = results.hits;
-		if (records.length === 0) {
-			records = await searchHallOfFame(search);
-		}
+		// if (records.length === 0) {
+		// 	records = await searchHallOfFame(search);
+		// }
 	} else if (id) {
 		records = await getHallOfFamePost(decryptData(id));
 	} else {
