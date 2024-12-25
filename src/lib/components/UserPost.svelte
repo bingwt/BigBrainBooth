@@ -114,7 +114,7 @@
         on:click={() => goto(`/hall-of-fame/${post.id}`)}
     >
         <VoteButton {post} />
-        {#if post.media.length}
+        {#if post.media?.length}
             <a href={`/hall-of-fame/${post.id}`} on:click|stopPropagation>
                 {#if isVideo(post.media[0])}
                     <video muted class="w-24 rounded-md">
