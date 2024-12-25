@@ -41,6 +41,9 @@
     }
 
     async function submitSaved() {
+        if (!login) {
+            return;
+        }
         let newSaved;
         if (saved) {
             newSaved = post.saves.filter((save) => save !== login);
