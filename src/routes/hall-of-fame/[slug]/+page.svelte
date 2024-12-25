@@ -9,7 +9,7 @@
     const login = $page.data?.user?.login;
     const name = $page.data?.user?.name;
     let saved = false;
-    let buttonText = "share";
+    let copied = false;
 
     onMount(async () => {
         const response = await fetch(`/api/v1/list/hall-of-fame`, {
@@ -149,9 +149,9 @@
     function copyToClipboard() {
         const url = `${window.location.origin}/hall-of-fame/${post.id}`;
         navigator.clipboard.writeText(url).then(() => {
-            buttonText = "copied to clipboard!";
+            copied = true;
             setTimeout(() => {
-                buttonText = "share";
+                copied = false;
             }, 2000);
         });
     }
@@ -289,7 +289,13 @@
                             class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
                             on:click={copyToClipboard}
                         >
-                            {buttonText}
+                            {#if copied}
+                                <span class="motion-preset-confetti"
+                                    >copied to clipboard!</span
+                                >
+                            {:else}
+                                <span>share</span>
+                            {/if}
                         </button>
                         <div
                             class="divider divider-horizontal divider-secondary"

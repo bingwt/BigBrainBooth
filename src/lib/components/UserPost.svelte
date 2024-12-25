@@ -6,7 +6,7 @@
 
     let login = $page.data?.user?.login;
     let saved = post.saves.includes(login) ? true : false;
-    let buttonText = "share";
+    let copied = false;
 
     function isVideo(media) {
         const videoExtensions = ["mp4"];
@@ -100,10 +100,10 @@
     function copyToClipboard() {
         const url = `${window.location.origin}/hall-of-fame/${post.id}`;
         navigator.clipboard.writeText(url).then(() => {
-            buttonText = "copied to clipboard!";
+            copied = true;
             setTimeout(() => {
-                buttonText = "share";
-            }, 2000);
+                copied = false;
+            }, 3000);
         });
     }
 </script>
@@ -158,7 +158,11 @@
                     class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
                     on:click={copyToClipboard}
                 >
-                    {buttonText}
+                    {#if copied}
+                        <span class="motion-preset-confetti">copied to clipboard!</span>
+                    {:else}
+                        <span>share</span>
+                    {/if}
                 </button>
                 <div class="divider divider-horizontal divider-secondary"></div>
                 <button
