@@ -65,8 +65,33 @@
             body: JSON.stringify({ id: post.id }),
         });
         post = await response.json();
-
         saved = post.saves.includes(login) ? true : false;
+
+        const profileResponse = await fetch(
+            `/api/v1/list/profile?login=${login}`,
+        );
+        const profile = await profileResponse.json();
+        if (saved) {
+            await fetch(`/api/v1/update/profile`, {
+                method: "POST",
+                body: JSON.stringify({
+                    id: profile[0].id,
+                    record: { saved: [...profile[0].saved, post.id] },
+                }),
+            });
+        } else {
+            await fetch(`/api/v1/update/profile`, {
+                method: "POST",
+                body: JSON.stringify({
+                    id: profile[0].id,
+                    record: {
+                        saved: profile[0].saved.filter(
+                            (save) => save !== post.id,
+                        ),
+                    },
+                }),
+            });
+        }
     }
 
     function copyToClipboard() {
@@ -134,7 +159,7 @@
                 </button>
                 <div class="divider divider-horizontal divider-secondary"></div>
                 <button
-                    class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300 hover:motion-preset-pulse"
+                    class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300"
                     on:click={submitSaved}
                 >
                     {#if saved}
