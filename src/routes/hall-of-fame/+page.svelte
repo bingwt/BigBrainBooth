@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
-    import UserPost from "$lib/components/UserPost.svelte";
+    const UserPostComponent = import('$lib/components/UserPost.svelte');
 
     let posts = [];
 
@@ -60,7 +60,9 @@
                     class="motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-opacity-in-[0%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate motion-delay-[{i *
                         1000}ms]"
                 >
-                    <UserPost {post} />
+                    {#await UserPostComponent then module}
+                        <svelte:component this={module.default} {post} />
+                    {/await}
                 </div>
             {/each}
         </div>
