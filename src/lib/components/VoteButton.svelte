@@ -5,9 +5,9 @@
 
     let login = $page.data?.user?.login;
 
-    $: upVoted = post.votes.up.includes(login) ? true : false;
-    $: downVoted = post.votes.down.includes(login) ? true : false;
-    $: votes = post.votes.up.length - post.votes.down.length;
+    $: upVoted = post?.votes?.up?.includes(login) ? true : false;
+    $: downVoted = post?.votes?.down?.includes(login) ? true : false;
+    $: votes = post?.votes?.up?.length - post?.votes?.down?.length;
 
     let newRecord = {
         votes: {

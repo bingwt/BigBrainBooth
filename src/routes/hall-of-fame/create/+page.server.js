@@ -70,7 +70,7 @@ export const actions = {
 
         const pbResponse = await createHallOfFamePost(record);
         const msRecord = {
-            id: encryptData(pbResponse.id),
+            id: pbResponse.id,
             title: record.title,
             description: record.description,
             author: record.author,
@@ -79,9 +79,7 @@ export const actions = {
             tags: record.tags,
             comments: record.comments
         }
-        console.log(msRecord);
         let msResponse = await ms.index("hall-of-fame").addDocuments([msRecord]);
-        console.log(msResponse);
         return { success: true };
     },
 };
