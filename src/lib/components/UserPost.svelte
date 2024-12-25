@@ -5,7 +5,7 @@
     import VoteButton from "./VoteButton.svelte";
 
     let login = $page.data?.user?.login;
-    let saved = post.saves.includes(login) ? true : false;
+    let saved = post.saves?.includes(login) ? true : false;
     let copied = false;
 
     function isVideo(media) {
