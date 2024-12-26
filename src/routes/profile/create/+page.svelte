@@ -32,7 +32,7 @@
 </svelte:head>
 
 {#if form?.success}
-	<div class="hero-content flex flex-col">
+	<div class="hero-content flex flex-col text-secondary">
 		<h1 class="text-4xl font-bold text-center">Thank you for your post!</h1>
 		<a
 			href="/feedback"
@@ -53,7 +53,7 @@
 {:else}
 	<form method="POST" action="?/submit" class="hero-content">
 		<div
-			class="form-control flex flex-col gap-4 justify-between p-0 text-3xl sm:text-4xl w-[90dvw] max-w-md"
+			class="form-control flex flex-col gap-4 justify-between p-0 text-3xl sm:text-4xl w-[90dvw] max-w-md text-secondary"
 		>
 			<h1 class="font-bold">Create a New Post</h1>
 			<fieldset id="title" class="flex flex-col gap-0">
@@ -62,14 +62,14 @@
 					type="text"
 					name="title"
 					placeholder=""
-					class="input input-bordered"
+					class="input input-bordered bg-primary"
 					bind:value={title}
 				/>
 			</fieldset>
 			<fieldset id="description" class="flex flex-col gap-0">
 				<h2 class="font-bold text-lg">Description</h2>
 				<textarea
-					class="textarea textarea-bordered"
+					class="textarea textarea-bordered bg-primary"
 					name="description"
 					placeholder=""
 					bind:value={description}
@@ -78,7 +78,7 @@
 			<fieldset id="tags" class="flex flex-col gap-0">
 				<h2 class="font-bold text-lg">Tags</h2>
 				<div
-					class="flex flex-wrap gap-2 items-center border border-secondary rounded-lg p-2"
+					class="flex flex-wrap gap-2 items-center border border-secondary rounded-lg p-2 bg-primary"
 				>
 					{#each tags as tag}
 						<div
@@ -94,7 +94,7 @@
 					{/each}
 					<input
 						type="text"
-						class="input flex-grow focus:outline-none focus:border-none"
+						class="input flex-grow focus:outline-none focus:border-none bg-primary"
 						placeholder="Add tags..."
 						bind:value={inputTag}
 						on:keydown={(e) => {

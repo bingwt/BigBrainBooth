@@ -33,7 +33,7 @@
 </svelte:head>
 
 <div class="hero-content">
-    <div class="flex flex-col align-middle gap-4">
+    <div class="flex flex-col align-middle gap-4 text-secondary">
         <h1 class="text-4xl font-bold p-4 mt-12">Hall of Fame</h1>
         <div class="p-4 pb-0">
             <label class="input input-secondary flex items-center gap-2">

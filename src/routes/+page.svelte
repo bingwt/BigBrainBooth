@@ -28,7 +28,7 @@
 </svelte:head>
 
 {#if login}
-<div class="flex flex-col gap-4 justify-between p-0 w-full text-3xl sm:text-4xl">
+<div class="flex flex-col gap-4 justify-between p-0 w-full text-3xl sm:text-4xl text-secondary">
 <h1>Welcome <span class="font-bold">{login}</span>,</h1>
 {#if reserved === ""}
 <h1>The <span class="font-bold">Big Brain Booth</span> is <span class="text-success font-bold">AVAILABLE</span></h1>
