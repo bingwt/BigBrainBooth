@@ -41,12 +41,15 @@ export async function GET({ url, locals }) {
 	let records = [];
 
 	let searchFilter = ["*"];
+	let searchRetrieve = ["id", "author", "author_meta", "title", "description", "media", "tags", "comments"];
 	if (!locals.user) {
-		searchFilter = ["author", "author_meta", "title", "media", "tags"];
+		searchFilter = ["author", "author_meta", "title", "description", "media", "tags"];
+		searchRetrieve = ["id", "author", "title", "media", "comments"];
 	}
 	if (search) {
 		const results = await ms.index(import.meta.env.VITE_MEILISEARCH_INDEX).search(search, {
-			attributesToSearchOn: searchFilter
+			attributesToSearchOn: searchFilter,
+			attributesToRetrieve: searchRetrieve
 		});
 		records = results.hits;
 		// if (records.length === 0) {
