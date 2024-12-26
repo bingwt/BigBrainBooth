@@ -5,14 +5,22 @@
 
     let posts = [];
 
-    onMount(async () => {
-        const response = await fetch("/api/v1/list/hall-of-fame");
-        posts = await response.json();
-    });
-
     let search = "";
 
+    onMount(async () => {
+        const savedSearch = localStorage.getItem("hallOfFameSearch");
+        if (savedSearch) {
+            search = savedSearch;
+            await searchPosts();
+        } else {
+            const response = await fetch("/api/v1/list/hall-of-fame");
+            posts = await response.json();
+        }
+    });
+
     async function searchPosts() {
+        localStorage.setItem("hallOfFameSearch", search);
+
         const response = await fetch(
             `/api/v1/list/hall-of-fame?search=${search}`,
         );

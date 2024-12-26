@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { error, json } from '@sveltejs/kit';
-import { updateHallOfFamePost } from '$lib/pocketbase';
+import { deleteHallOfFamePost } from '$lib/pocketbase';
 import crypto from 'crypto';
 import { ms } from '$lib/meilisearch';
 
@@ -20,8 +20,8 @@ function decryptData(data) {
 	const buff = Buffer.from(data, 'base64')
 	const decipher = crypto.createDecipheriv(import.meta.env.VITE_ENCRYPTION_METHOD, secret_key, encryptionIV)
 	return (
-	  decipher.update(buff.toString('utf8'), 'hex', 'utf8') +
-	  decipher.final('utf8')
+		decipher.update(buff.toString('utf8'), 'hex', 'utf8') +
+		decipher.final('utf8')
 	)
 }
 
@@ -30,22 +30,13 @@ export async function POST({ request, cookies }) {
 	const allowedOrigins = [import.meta.env.VITE_42API_URL];
 
 	if (!origin || !allowedOrigins.includes(origin)) {
-			throw error(403, 'Origin not allowed');
+		throw error(403, 'Origin not allowed');
 	}
 
-	const { id, record } = await request.json();
-	if (record) {
-		updateHallOfFamePost(decryptData(id), record);
-		let msRecord = {
-			id: decryptData(id),
-			title: record.title,
-			description: record.description,
-			author: record.author,
-			author_meta: record.author_meta,
-			tags: record.tags,
-			comments: record.comments
-		}
-		let msResponse = await ms.index(import.meta.env.VITE_MEILISEARCH_INDEX).updateDocuments([msRecord]);
+	const { id } = await request.json();
+	if (id) {
+		deleteHallOfFamePost(decryptData(id));
+		let msResponse = await ms.index(import.meta.env.VITE_MEILISEARCH_INDEX).deleteDocuments(decryptData(id));
 		return (json('success', { status: 201 }))
 	}
 	error(404, 'Not found');
