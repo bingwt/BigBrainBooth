@@ -5,8 +5,8 @@
     import VoteButton from "./VoteButton.svelte";
 
     let login = $page.data?.user?.login;
-    let saved = post.saves.includes(login) ? true : false;
-    let buttonText = "share";
+    let saved = post.saves?.includes(login) ? true : false;
+    let copied = false;
 
     function isVideo(media) {
         const videoExtensions = ["mp4"];
@@ -41,6 +41,9 @@
     }
 
     async function submitSaved() {
+        if (!login) {
+            return;
+        }
         let newSaved;
         if (saved) {
             newSaved = post.saves.filter((save) => save !== login);
@@ -65,17 +68,42 @@
             body: JSON.stringify({ id: post.id }),
         });
         post = await response.json();
-
         saved = post.saves.includes(login) ? true : false;
+
+        const profileResponse = await fetch(
+            `/api/v1/list/profile?login=${login}`,
+        );
+        const profile = await profileResponse.json();
+        if (saved) {
+            await fetch(`/api/v1/update/profile`, {
+                method: "POST",
+                body: JSON.stringify({
+                    id: profile[0].id,
+                    record: { saved: [...profile[0].saved, post.id] },
+                }),
+            });
+        } else {
+            await fetch(`/api/v1/update/profile`, {
+                method: "POST",
+                body: JSON.stringify({
+                    id: profile[0].id,
+                    record: {
+                        saved: profile[0].saved.filter(
+                            (save) => save !== post.id,
+                        ),
+                    },
+                }),
+            });
+        }
     }
 
     function copyToClipboard() {
         const url = `${window.location.origin}/hall-of-fame/${post.id}`;
         navigator.clipboard.writeText(url).then(() => {
-            buttonText = "copied to clipboard!";
+            copied = true;
             setTimeout(() => {
-                buttonText = "share";
-            }, 2000);
+                copied = false;
+            }, 3000);
         });
     }
 </script>
@@ -86,7 +114,7 @@
         on:click={() => goto(`/hall-of-fame/${post.id}`)}
     >
         <VoteButton {post} />
-        {#if post.media.length}
+        {#if post.media?.length}
             <a href={`/hall-of-fame/${post.id}`} on:click|stopPropagation>
                 {#if isVideo(post.media[0])}
                     <video muted class="w-24 rounded-md">
@@ -130,11 +158,15 @@
                     class="btn btn-link text-secondary font-bold hover:text-accent hover:underline no-underline p-0"
                     on:click={copyToClipboard}
                 >
-                    {buttonText}
+                    {#if copied}
+                        <span class="motion-preset-confetti">copied to clipboard!</span>
+                    {:else}
+                        <span>share</span>
+                    {/if}
                 </button>
                 <div class="divider divider-horizontal divider-secondary"></div>
                 <button
-                    class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300 hover:motion-preset-pulse"
+                    class="btn btn-link text-secondary font-bold hover:text-error hover:underline no-underline p-0 hover:scale-[1.2] transition-all duration-300"
                     on:click={submitSaved}
                 >
                     {#if saved}

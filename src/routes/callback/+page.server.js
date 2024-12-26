@@ -1,4 +1,5 @@
 import { redirect } from '@sveltejs/kit';
+import { createProfile, getProfile } from '$lib/pocketbase';
 
 export async function load({ url, fetch, cookies }) {
     const code = url.searchParams.get('code');
@@ -50,6 +51,19 @@ export async function load({ url, fetch, cookies }) {
 			image: userData.image.link
         }
     };
+
+    const profile = await getProfile(userData.login);
+    if (profile.length === 0) {
+        await createProfile({
+            login: userData.login,
+            votes: {
+                up: [],
+                down: []
+            },
+            saves: [],
+            comments: []
+        });
+    }
 
     cookies.set('session', JSON.stringify(session), {
         httpOnly: true,

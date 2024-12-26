@@ -1,8 +1,7 @@
 // @ts-nocheck
 import { error, json } from '@sveltejs/kit';
-import { updateHallOfFamePost } from '$lib/pocketbase';
+import { updateProfile } from '$lib/pocketbase';
 import crypto from 'crypto';
-import { ms } from '$lib/meilisearch';
 
 const secret_key = crypto
 .createHash('sha512')
@@ -35,17 +34,7 @@ export async function POST({ request, cookies }) {
 
 	const { id, record } = await request.json();
 	if (record) {
-		updateHallOfFamePost(decryptData(id), record);
-		let msRecord = {
-			id: decryptData(id),
-			title: record.title,
-			description: record.description,
-			author: record.author,
-			author_meta: record.author_meta,
-			tags: record.tags,
-			comments: record.comments
-		}
-		let msResponse = await ms.index(import.meta.env.VITE_MEILISEARCH_INDEX).updateDocuments([msRecord]);
+		updateProfile(decryptData(id), record);
 		return (json('success', { status: 201 }))
 	}
 	error(404, 'Not found');

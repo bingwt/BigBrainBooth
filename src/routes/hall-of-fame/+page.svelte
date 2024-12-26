@@ -5,14 +5,22 @@
 
     let posts = [];
 
-    onMount(async () => {
-        const response = await fetch("/api/v1/list/hall-of-fame");
-        posts = await response.json();
-    });
-
     let search = "";
 
+    onMount(async () => {
+        const savedSearch = localStorage.getItem("hallOfFameSearch");
+        if (savedSearch) {
+            search = savedSearch;
+            await searchPosts();
+        } else {
+            const response = await fetch("/api/v1/list/hall-of-fame");
+            posts = await response.json();
+        }
+    });
+
     async function searchPosts() {
+        localStorage.setItem("hallOfFameSearch", search);
+
         const response = await fetch(
             `/api/v1/list/hall-of-fame?search=${search}`,
         );
@@ -21,7 +29,7 @@
 </script>
 
 <svelte:head>
-    <title>Hall of fame</title>
+    <title>Hall of Fame</title>
 </svelte:head>
 
 <div class="hero-content">
@@ -48,13 +56,15 @@
                 >
             </label>
         </div>
+        <div class="flex flex-row gap-2 justify-between pl-6 pr-6">
+            <p class="font-bold">
+                {posts.length}
+                {posts.length == 1 ? "post" : "posts"}
+            </p>
+        </div>
         <div
             class="overflow-y-scroll p-4 flex flex-col gap-4 text-left h-[75dvh] w-screen fade-top pt-10 max-w-screen-lg"
         >
-            <div class="font-bold">
-                {posts.length}
-                {posts.length == 1 ? "post" : "posts"}
-            </div>
             {#each posts as post, i}
                 <div
                     class="motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-opacity-in-[0%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate motion-delay-[{i *

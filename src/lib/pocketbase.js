@@ -102,7 +102,8 @@ export async function searchHallOfFame(search) {
 }
 
 export async function createHallOfFamePost(record) {
-	await pb.collection('42_hall_of_fame').create(record);
+	const response = await pb.collection('42_hall_of_fame').create(record);
+	return (response);
 }
 
 export async function getHallOfFamePost(id) {
@@ -121,4 +122,21 @@ export async function updateHallOfFamePost(id, record) {
 
 export async function deleteHallOfFamePost(id) {
 	await pb.collection('42_hall_of_fame').delete(id);
+}
+
+export async function createProfile(record) {
+	await pb.collection('42_bbb_profiles').create(record);
+}
+
+export async function getProfile(login) {
+	const records = await pb.collection('42_bbb_profiles').getFullList({
+		filter: `login ~ "${login}"`,
+		sort: '-created',
+		fields: 'id,login,votes,saved,comments,created'
+	});
+	return (records);
+}
+
+export async function updateProfile(id, record) {
+	await pb.collection('42_bbb_profiles').update(id, record);
 }

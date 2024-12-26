@@ -39,8 +39,8 @@
 {/if}
 <h1>From <span class="text-accent font-bold">{start.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span> to <span class="text-accent font-bold">{end.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span></h1>
 {/if}
-<a href="/booking" class="btn btn-secondary text-primary hover:btn-warning hover:text-primary font-satoshi font-bold p-4 h-8">Reserve</a>
-<a href="/hall-of-fame" class="btn btn-secondary text-primary hover:btn-warning hover:text-primary font-satoshi font-bold p-4 h-8">Hall of Fame</a>
+<a href="/booking" class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-8">Reserve</a>
+<a href="/hall-of-fame" class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-8">Hall of Fame</a>
 </div>
 {:else}
 <div class="flex flex-col gap-4 justify-between p-0 w-full text-3xl sm:text-4xl">
@@ -53,6 +53,7 @@
 	<a href="/booking" class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-8">
 		<p>View Schedule</p>
 	</a>
+	<a href="/hall-of-fame" class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-8">Hall of Fame</a>
 	<a href="/faq" class="btn btn-secondary text-primary hover:btn-accent hover:text-primary font-satoshi font-bold p-4 h-8">
 		<p>FAQ</p>
 	</a>

@@ -28,6 +28,7 @@
   },
   "type": "module",
   "dependencies": {
+    "meilisearch": "^0.47.0",
     "pocketbase": "^0.21.5"
   }
 }
