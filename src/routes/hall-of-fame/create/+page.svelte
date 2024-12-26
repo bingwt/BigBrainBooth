@@ -14,6 +14,7 @@
 	let media: string[] = [];
 	let mediaURL: string = "";
 	let mediaName: string = "";
+	let uploading: boolean = false;
 
 	function addTag() {
 		if (inputTag.trim() && !tags.includes(inputTag.trim())) {
@@ -27,6 +28,7 @@
 	}
 
 	async function uploadFile(e: Event) {
+		uploading = true;
 		const file = (e.target as HTMLInputElement).files?.[0];
 		if (file) {
 			const safeFileName = file.name
@@ -56,8 +58,9 @@
 					body: file,
 				});
 				if (!uploadFileResponse.ok) {
-					console.error("Failed to upload file");
-				}
+				console.error("Failed to upload file");
+			}
+			uploading = false;
 		}
 	}
 </script>
@@ -231,7 +234,7 @@
 			</fieldset> -->
 			<button
 				class="btn btn-secondary font-bold hover:btn-accent hover:text-primary"
-				disabled={title && description ? false : true}>Submit</button
+				disabled={title && description && !uploading ? false : true}>Submit</button
 			>
 		</div>
 	</form>
