@@ -193,18 +193,17 @@
 </svelte:head>
 
 {#if post}
-    <div class="hero-content motion-preset-fade">
+    <div class="hero-content motion-preset-fade text-secondary">
         <div class="flex flex-col align-middle gap-4 w-screen mt-8">
             <div
                 class="flex flex-col gap-4 border p-4 rounded-xl mt-4 shadow-xl motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-opacity-in-[0%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate"
             >
                 <div class="flex flex-row gap-2 justify-between">
                     {#if editMode}
-                        <input
-                            type="text"
+                        <textarea
                             bind:value={post.title}
-                            class="input input-primary text-3xl font-bold border-secondary focus:border-accent"
-                        />
+                            class="textarea textarea-primary text-3xl font-bold border-secondary focus:border-accent bg-primary w-full resize-none"
+                        ></textarea>
                     {:else}
                         <h1 class="text-4xl font-bold">{post.title}</h1>
                     {/if}
@@ -336,7 +335,7 @@
                         <div class="flex flex-col gap-4">
                             <textarea
                                 bind:value={post.description}
-                                class="textarea textarea-primary border-secondary focus:border-accent resize-none text-md"
+                                class="textarea textarea-primary border-secondary focus:border-accent resize-none text-md bg-primary"
                             ></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
@@ -438,7 +437,7 @@
                     class="flex flex-col gap-4 p-4 rounded-lg shadow-md border"
                 >
                     <textarea
-                        class="textarea textarea-bordered textarea-primary w-full h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
+                        class="textarea textarea-bordered textarea-primary w-full h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent bg-primary"
                         placeholder="Comment..."
                         bind:value={comment}
                     ></textarea>

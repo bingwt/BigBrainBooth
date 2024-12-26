@@ -47,7 +47,7 @@
     <title>BBB - Profile</title>
 </svelte:head>
 
-<div class="hero-content">
+<div class="hero-content text-secondary">
     <div class="flex flex-col align-middle gap-4">
         <h1 class="text-4xl font-bold p-4 mt-12">Profile</h1>
         <div

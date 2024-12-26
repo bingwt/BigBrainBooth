@@ -25,22 +25,22 @@
 </svelte:head>
 
 {#if form?.success}
-<div class="hero-content flex flex-col">
+<div class="hero-content flex flex-col text-secondary">
 	<h1 class="text-4xl font-bold text-center">Thank you for your feedback!</h1>
 	<a href="/feedback" class="btn btn-secondary font-bold hover:btn-accent hover:text-primary">Submit another feedback</a>
 	<a href="/" class="btn btn-secondary font-bold hover:btn-accent hover:text-primary">Home</a>
 </div>
 {:else}
-<form method="POST" action="?/submit" class="hero-content">
+<form method="POST" action="?/submit" class="hero-content text-secondary">
 	<div class="form-control flex flex-col gap-4 justify-between p-0 text-3xl sm:text-4xl w-[90dvw] max-w-md">
 		<h1 class="font-bold">{type === "feedback" ? "Feedback" : ""}{type === "feature" ? "Feature Request" : ""}{type === "bug" ? "Bug Report" : ""}</h1>
 		<fieldset id="title" class="flex flex-col gap-0">
 			<h2 class="font-bold text-lg">Title</h2>
-			<input type="text" name="title" placeholder="" class="input input-bordered" bind:value={title} />
+			<input type="text" name="title" placeholder="" class="input input-bordered bg-primary" bind:value={title} />
 		</fieldset>
 		<fieldset id="description" class="flex flex-col gap-0">
 			<h2 class="font-bold text-lg">Description</h2>
-			<textarea class="textarea textarea-bordered" name="description" placeholder="" bind:value={description}></textarea>
+			<textarea class="textarea textarea-bordered bg-primary" name="description" placeholder="" bind:value={description}></textarea>
 		</fieldset>
 		<fieldset id="priority" class="flex flex-col gap-0">
 			<h2 class="font-bold text-lg">Priority</h2>
