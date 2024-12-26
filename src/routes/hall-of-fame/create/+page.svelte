@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import { dark_mode } from "$lib/stores";
-	import { S3 } from "$lib/s3";
-	import { v4 as uuidv4 } from "uuid";
 
 	/** @type {import('./$types').ActionData} */
 	export let form;
@@ -31,7 +29,6 @@
 	async function uploadFile(e: Event) {
 		const file = (e.target as HTMLInputElement).files?.[0];
 		if (file) {
-			console.log(file);
 			const safeFileName = file.name
 				.replace(/[^a-z0-9]/gi, "_")
 				.toLowerCase();
@@ -50,15 +47,17 @@
 			}
 			const { presignedUrl, objectKey } =
 				await getPresignedUrlResponse.json();
-			mediaURL = presignedUrl;
+			mediaURL = `${import.meta.env.VITE_R2_DOMAIN}/${objectKey}`;
 			mediaName = safeFileName;
+			media = [...media, mediaURL];
+
 			const uploadFileResponse = await fetch(presignedUrl, {
-				method: "PUT",
-				body: file,
-			});
-			if (!uploadFileResponse.ok) {
-				console.error("Failed to upload file");
-			}
+					method: "PUT",
+					body: file,
+				});
+				if (!uploadFileResponse.ok) {
+					console.error("Failed to upload file");
+				}
 		}
 	}
 </script>
@@ -71,7 +70,7 @@
 	<div class="hero-content flex flex-col text-secondary">
 		<h1 class="text-4xl font-bold text-center">Thank you for your post!</h1>
 		<a
-			href="/feedback"
+			href="/hall-of-fame/create"
 			class="btn btn-secondary font-bold hover:btn-accent hover:text-primary"
 			>Submit another post</a
 		>
@@ -177,6 +176,7 @@
 						class="input input-bordered bg-primary hover:cursor-pointer join-item w-full"
 						placeholder={mediaURL ? mediaName : "No File"}
 						disabled
+						value={mediaName}
 					/>
 				</label>
 				<input
@@ -186,6 +186,7 @@
 					class="file-input bg-primary file-input-bordered hidden"
 					on:change={uploadFile}
 				/>
+				<input type="hidden" name="media" value={JSON.stringify(media)} />
 			</fieldset>
 			<!-- <fieldset
 				id="media"

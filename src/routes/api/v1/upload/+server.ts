@@ -15,7 +15,6 @@ export async function POST({ request, locals }) {
     }
     const { fileName, fileType, } = await request.json() as { fileName: string | undefined, fileType: string | undefined };
 
-    console.log(fileName, fileType);
     const uniqueFileName = uuidv4();
     const extension = fileType.split('/')[1];
     // const slugifiedFileName = `${slugifyString(Date.now().toString())}-${slugifyString(fileName)}`;
