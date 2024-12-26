@@ -7,6 +7,8 @@
 
     let search = "";
 
+    let inputFocused = false;
+
     onMount(async () => {
         const savedSearch = localStorage.getItem("hallOfFameSearch");
         if (savedSearch) {
@@ -36,24 +38,53 @@
     <div class="flex flex-col align-middle gap-4 text-secondary">
         <h1 class="text-4xl font-bold p-4 mt-12">Hall of Fame</h1>
         <div class="p-4 pb-0">
-            <label class="input input-secondary flex items-center gap-2">
+            <label
+                class="flex items-center gap-2 rounded-xl border-2 p-2 motion-preset-fade"
+                class:border-accent={inputFocused}
+                class:border-secondary={!inputFocused}
+            >
                 <input
                     type="text"
-                    class="grow"
+                    class="grow focus:outline-none pl-2 pr-2"
                     placeholder="Search"
                     bind:value={search}
                     on:input={searchPosts}
+                    on:focus={() => (inputFocused = true)}
+                    on:blur={() => (inputFocused = false)}
                 />
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="#000000"
-                    viewBox="0 0 256 256"
-                    ><path
-                        d="M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z"
-                    ></path></svg
-                >
+                {#if search}
+                    <button
+                        class="btn btn-ghost btn-xs motion-preset-fade"
+                        on:click={() => {
+                            search = "";
+                            searchPosts();
+                        }}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                            ><path
+                                d="M168.49,104.49,145,128l23.52,23.51a12,12,0,0,1-17,17L128,145l-23.51,23.52a12,12,0,0,1-17-17L111,128,87.51,104.49a12,12,0,0,1,17-17L128,111l23.51-23.52a12,12,0,0,1,17,17ZM236,128A108,108,0,1,1,128,20,108.12,108.12,0,0,1,236,128Zm-24,0a84,84,0,1,0-84,84A84.09,84.09,0,0,0,212,128Z"
+                            ></path></svg
+                        >
+                    </button>
+                {:else}
+                    <button class="btn btn-ghost btn-xs motion-preset-fade">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            fill="currentColor"
+                            viewBox="0 0 256 256"
+                            ><path
+                                d="M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z"
+                            ></path></svg
+                        >
+                    </button>
+                {/if}
             </label>
         </div>
         <div class="flex flex-row gap-2 justify-between pl-6 pr-6">
@@ -63,7 +94,7 @@
             </p>
         </div>
         <div
-            class="overflow-y-scroll p-4 flex flex-col gap-4 text-left h-[75dvh] w-screen fade-top pt-10 max-w-screen-lg"
+            class="overflow-y-scroll p-4 flex flex-col gap-4 text-left h-[65dvh] w-screen fade-top pt-10 max-w-screen-lg"
         >
             {#each posts as post, i}
                 <div
