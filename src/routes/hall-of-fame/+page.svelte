@@ -29,7 +29,7 @@
 </script>
 
 <svelte:head>
-    <title>Hall of fame</title>
+    <title>Hall of Fame</title>
 </svelte:head>
 
 <div class="hero-content">

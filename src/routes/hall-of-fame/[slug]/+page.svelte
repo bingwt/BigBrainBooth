@@ -189,7 +189,7 @@
 </script>
 
 <svelte:head>
-    <title>Hall of fame</title>
+    <title>{post ? `${post.title}` : "Hall of Fame"}</title>
 </svelte:head>
 
 {#if post}
