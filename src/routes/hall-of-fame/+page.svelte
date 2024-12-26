@@ -45,7 +45,7 @@
             >
                 <input
                     type="text"
-                    class="grow focus:outline-none pl-2 pr-2"
+                    class="grow focus:outline-none pl-2 pr-2 text-secondary bg-primary"
                     placeholder="Search"
                     bind:value={search}
                     on:input={searchPosts}
