@@ -28,7 +28,10 @@
   },
   "type": "module",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.717.0",
+    "@aws-sdk/s3-request-presigner": "^3.717.0",
     "meilisearch": "^0.47.0",
-    "pocketbase": "^0.21.5"
+    "pocketbase": "^0.21.5",
+    "uuid": "^11.0.3"
   }
 }

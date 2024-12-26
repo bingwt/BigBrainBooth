@@ -68,18 +68,18 @@ export const actions = {
             comments: [],
         }
 
-        const pbResponse = await createHallOfFamePost(record);
-        const msRecord = {
-            id: pbResponse.id,
-            title: record.title,
-            description: record.description,
-            author: record.author,
-            author_meta: record.author_meta,
-            // media: record.media,
-            tags: record.tags,
-            comments: record.comments
-        }
-        let msResponse = await ms.index(import.meta.env.VITE_MEILISEARCH_INDEX).addDocuments([msRecord]);
+        // const pbResponse = await createHallOfFamePost(record);
+        // const msRecord = {
+        //     id: pbResponse.id,
+        //     title: record.title,
+        //     description: record.description,
+        //     author: record.author,
+        //     author_meta: record.author_meta,
+        //     // media: record.media,
+        //     tags: record.tags,
+        //     comments: record.comments
+        // }
+        // let msResponse = await ms.index(import.meta.env.VITE_MEILISEARCH_INDEX).addDocuments([msRecord]);
         return { success: true };
     },
 };
