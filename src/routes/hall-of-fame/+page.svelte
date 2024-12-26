@@ -61,6 +61,59 @@
                 {posts.length}
                 {posts.length == 1 ? "post" : "posts"}
             </p>
+            <div class="flex h-4 items-center">
+                <label class="swap">
+                    <input type="checkbox" />
+                    <svg
+                        class="swap-on fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="#000000"
+                        viewBox="0 0 256 256"
+                        ><path
+                            d="M244,128v64a12,12,0,0,1-12,12H168a12,12,0,0,1,0-24h35l-67-67-31.51,31.52a12,12,0,0,1-17,0l-72-72a12,12,0,0,1,17-17L96,119l31.51-31.52a12,12,0,0,1,17,0L220,163V128a12,12,0,0,1,24,0Z"
+                        ></path></svg
+                    >
+                    <svg
+                        class="swap-off fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="#000000"
+                        viewBox="0 0 256 256"
+                        ><path
+                            d="M244,56v64a12,12,0,0,1-24,0V85l-75.51,75.52a12,12,0,0,1-17,0L96,129,32.49,192.49a12,12,0,0,1-17-17l72-72a12,12,0,0,1,17,0L136,135l67-67H168a12,12,0,0,1,0-24h64A12,12,0,0,1,244,56Z"
+                        ></path></svg
+                    >
+                </label>
+                <div class="divider divider-horizontal divider-secondary"></div>
+                <label class="swap">
+                    <input type="checkbox" />
+                    <svg
+                        class="swap-on fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="#000000"
+                        viewBox="0 0 256 256"
+                        ><path
+                            d="M244,128v64a12,12,0,0,1-12,12H168a12,12,0,0,1,0-24h35l-67-67-31.51,31.52a12,12,0,0,1-17,0l-72-72a12,12,0,0,1,17-17L96,119l31.51-31.52a12,12,0,0,1,17,0L220,163V128a12,12,0,0,1,24,0Z"
+                        ></path></svg
+                    >
+                    <svg
+                        class="swap-off fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="#000000"
+                        viewBox="0 0 256 256"
+                        ><path
+                            d="M244,56v64a12,12,0,0,1-24,0V85l-75.51,75.52a12,12,0,0,1-17,0L96,129,32.49,192.49a12,12,0,0,1-17-17l72-72a12,12,0,0,1,17,0L136,135l67-67H168a12,12,0,0,1,0-24h64A12,12,0,0,1,244,56Z"
+                        ></path></svg
+                    >
+                </label>
+            </div>
         </div>
         <div
             class="overflow-y-scroll p-4 flex flex-col gap-4 text-left h-[75dvh] w-screen fade-top pt-10 max-w-screen-lg"
