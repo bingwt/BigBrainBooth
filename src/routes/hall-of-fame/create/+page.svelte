@@ -12,8 +12,9 @@
 	let tags: string[] = [];
 	let inputTag: string = "";
 	let media: string[] = [];
-	let image_url: string = "";
-	let image_name: string = "";
+	let mediaURL: string = "";
+	let mediaName: string = "";
+	let uploading: boolean = false;
 
 	function addTag() {
 		if (inputTag.trim() && !tags.includes(inputTag.trim())) {
@@ -25,6 +26,43 @@
 	function removeTag(tag: string) {
 		tags = tags.filter((t) => t !== tag);
 	}
+
+	async function uploadFile(e: Event) {
+		uploading = true;
+		const file = (e.target as HTMLInputElement).files?.[0];
+		if (file) {
+			const safeFileName = file.name
+				.replace(/[^a-z0-9]/gi, "_")
+				.toLowerCase();
+			const getPresignedUrlResponse = await fetch("/api/v1/upload", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					fileName: safeFileName,
+					fileType: file.type,
+				}),
+			});
+			if (!getPresignedUrlResponse.ok) {
+				console.error("Failed to get presigned URL");
+			}
+			const { presignedUrl, objectKey } =
+				await getPresignedUrlResponse.json();
+			mediaURL = `${import.meta.env.VITE_R2_DOMAIN}/${objectKey}`;
+			mediaName = safeFileName;
+			media = [...media, mediaURL];
+
+			const uploadFileResponse = await fetch(presignedUrl, {
+					method: "PUT",
+					body: file,
+				});
+				if (!uploadFileResponse.ok) {
+				console.error("Failed to upload file");
+			}
+			uploading = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -35,7 +73,7 @@
 	<div class="hero-content flex flex-col text-secondary">
 		<h1 class="text-4xl font-bold text-center">Thank you for your post!</h1>
 		<a
-			href="/feedback"
+			href="/hall-of-fame/create"
 			class="btn btn-secondary font-bold hover:btn-accent hover:text-primary"
 			>Submit another post</a
 		>
@@ -117,7 +155,43 @@
 				</div>
 				<input type="hidden" name="tags" value={JSON.stringify(tags)} />
 			</fieldset>
-			<fieldset
+			<fieldset id="media" class="flex flex-col gap-0">
+				<label for="file" class="join join-horizontal w-full">
+					<btn
+						class="btn btn-{$dark_mode
+							? 'secondary'
+							: 'primary border-secondary'} join-item
+						hover:bg-accent hover:text-primary"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="32"
+							height="32"
+							fill="currentColor"
+							viewBox="0 0 256 256"
+						>
+							<path
+								d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-42.34-77.66a8,8,0,0,1-11.32,11.32L136,139.31V184a8,8,0,0,1-16,0V139.31l-10.34,10.35a8,8,0,0,1-11.32-11.32l24-24a8,8,0,0,1,11.32,0Z"
+							></path>
+						</svg>
+					</btn>
+					<input
+						class="input input-bordered bg-primary hover:cursor-pointer join-item w-full"
+						placeholder={mediaURL ? mediaName : "No File"}
+						disabled
+						value={mediaName}
+					/>
+				</label>
+				<input
+					type="file"
+					id="file"
+					accept="image/jpeg,image/png,image/jpg,video/mp4,video/webm"
+					class="file-input bg-primary file-input-bordered hidden"
+					on:change={uploadFile}
+				/>
+				<input type="hidden" name="media" value={JSON.stringify(media)} />
+			</fieldset>
+			<!-- <fieldset
 				id="media"
 				class="flex flex-col gap-0 opacity-50"
 				disabled
@@ -147,7 +221,7 @@
 					</btn>
 					<input
 						class="input input-bordered bg-primary hover:cursor-default join-item w-full"
-						placeholder={image_url ? image_name : "No File"}
+						placeholder={mediaURL ? mediaName : "No File"}
 						disabled
 					/>
 				</label>
@@ -157,10 +231,10 @@
 					accept="image/jpeg"
 					class="file-input bg-primary file-input-bordered hidden"
 				/>
-			</fieldset>
+			</fieldset> -->
 			<button
 				class="btn btn-secondary font-bold hover:btn-accent hover:text-primary"
-				disabled={title && description ? false : true}>Submit</button
+				disabled={title && description && !uploading ? false : true}>Submit</button
 			>
 		</div>
 	</form>

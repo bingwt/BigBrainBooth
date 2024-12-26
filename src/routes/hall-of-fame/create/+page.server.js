@@ -60,7 +60,7 @@ export const actions = {
                 name: session.user.name,
                 image: session.user.image,
             },
-            media: [],
+            media: data.get('media'),
             tags: data.get('tags'),
             votes: { up: [], down: [] },
             saves: [],
