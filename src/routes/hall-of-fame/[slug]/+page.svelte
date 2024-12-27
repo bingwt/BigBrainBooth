@@ -200,10 +200,11 @@
             >
                 <div class="flex flex-row gap-2 justify-between">
                     {#if editMode}
-                        <textarea
+                        <input
+                            type="text"
                             bind:value={post.title}
-                            class="textarea textarea-primary text-3xl font-bold border-secondary focus:border-accent bg-primary w-full resize-none"
-                        ></textarea>
+                            class="input input-primary text-3xl font-bold border-secondary focus:border-accent"
+                        />
                     {:else}
                         <h1 class="text-4xl font-bold">{post.title}</h1>
                     {/if}
@@ -335,7 +336,7 @@
                         <div class="flex flex-col gap-4">
                             <textarea
                                 bind:value={post.description}
-                                class="textarea textarea-primary border-secondary focus:border-accent resize-none text-md bg-primary"
+                                class="textarea textarea-primary border-secondary focus:border-accent resize-none text-md"
                             ></textarea>
                         </div>
                         <div class="flex flex-col gap-2">
@@ -362,22 +363,19 @@
                 {/if}
                 {#if post.media.length}
                     <div
-                        class="carousel w-full rounded-xl gap-4 bg-black border-2 border-secondary min-h-[300px]"
+                        class="carousel rounded-xl gap-4 bg-black border-2 border-secondary"
                     >
-                        {#each post.media as media}
+                        {#each post.media as media, i}
                             <div
                                 class="carousel-item w-full flex justify-center items-center"
+                                id="media-{i + 1}"
                             >
                                 {#if isVideo(media)}
-                                    <video
-                                        controls
-                                        muted
-                                        class="w-full h-auto max-h-96 object-contain"
-                                        style="aspect-ratio: 16/9;"
-                                    >
+                                    <video controls muted>
                                         <source
                                             src={`${media}`}
                                             type="video/mp4"
+                                            class="max-w-96 max-h-fit object-contain"
                                         />
                                         Your browser does not support the video tag.
                                     </video>
@@ -385,13 +383,35 @@
                                     <img
                                         src={`${media}`}
                                         alt={post.title}
-                                        class="w-full h-auto max-h-96 object-contain"
-                                        style="aspect-ratio: 16/9;"
+                                        class="max-w-96 max-h-fit object-contain"
                                     />
                                 {/if}
                             </div>
                         {/each}
                     </div>
+                    {#if post.media.length > 1}
+                        <div class="flex w-full justify-center gap-2 py-2">
+                            {#each post.media as media, i}
+                                <div
+                                    class="flex flex-col gap-2"
+                                    on:click={() => {
+                                        goto(
+                                            `/hall-of-fame/${post.id}#media-${i + 1}`,
+                                        );
+                                    }}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="radio-media"
+                                        class="radio radio-accent"
+                                        checked={$page.url.pathname.includes(
+                                            `#media-${i + 1}`,
+                                        ) || i === 0}
+                                    />
+                                </div>
+                            {/each}
+                        </div>
+                    {/if}
                 {/if}
             </div>
             <div
@@ -437,7 +457,7 @@
                     class="flex flex-col gap-4 p-4 rounded-lg shadow-md border"
                 >
                     <textarea
-                        class="textarea textarea-bordered textarea-primary w-full h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent bg-primary"
+                        class="textarea textarea-bordered textarea-primary w-full h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
                         placeholder="Comment..."
                         bind:value={comment}
                     ></textarea>
