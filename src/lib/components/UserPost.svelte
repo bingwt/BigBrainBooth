@@ -3,6 +3,7 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
     import VoteButton from "./VoteButton.svelte";
+    import * as HoverCard from "$lib/components/ui/hover-card";
 
     let login = $page.data?.user?.login;
     let saved = post.saves?.includes(login) ? true : false;
@@ -138,11 +139,27 @@
             >
             <p>
                 submitted {formatDate(post.created)} by
-                <a
-                    href={`https://profile.intra.42.fr/users/${post.author}`}
-                    class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
-                    >{post.author}</a
-                >
+                <HoverCard.Root>
+                    <HoverCard.Trigger
+                        ><a
+                            href={`https://profile.intra.42.fr/users/${post.author}`}
+                            class="font-bold text-accent hover:text-accent2 hover:underline no-underline"
+                            >{post.author}</a
+                        ></HoverCard.Trigger
+                    >
+                    <HoverCard.Content>
+                        <div class="flex flex-row gap-4 items-center">
+                            <div class="avatar">
+                                <div
+                                    class="ring-accent ring-offset-base-100 w-14 rounded-full ring ring-offset-2"
+                                >
+                                    <img src={post.author_meta.image} />
+                                </div>
+                            </div>
+                            <div>{post.author_meta.name}</div>
+                        </div>
+                    </HoverCard.Content>
+                </HoverCard.Root>
             </p>
             <!-- <p class="text-lg">{post.description}</p> -->
             <div class="flex w-full h-4 items-center">
@@ -159,7 +176,9 @@
                     on:click={copyToClipboard}
                 >
                     {#if copied}
-                        <span class="motion-preset-confetti">copied to clipboard!</span>
+                        <span class="motion-preset-confetti"
+                            >copied to clipboard!</span
+                        >
                     {:else}
                         <span>share</span>
                     {/if}
